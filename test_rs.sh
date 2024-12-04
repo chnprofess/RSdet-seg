@@ -1,0 +1,2 @@
+# CUDA_VISIBLE_DEVICES=1 CUDA_LAUNCH_BLOCKING=1 python tools/train.py configs/rs/cascade_mask_rcnn_r101_fpn_1x_coco.py
+CUDA_VISIBLE_DEVICES=0 CUDA_LAUNCH_BLOCKING=1 python ./tools/test.py ./configs/rs/x101-64x4d_fpn_20e_coco.py ./work_dirs/x101-64x4d_fpn_20e_coco/epoch_19.pth --show --show-dir test_results

@@ -1,0 +1,904 @@
+nohup: 忽略输入
+12/03 09:01:33 - mmengine - INFO - 
+------------------------------------------------------------
+System environment:
+    sys.platform: linux
+    Python: 3.8.20 (default, Oct  3 2024, 15:24:27) [GCC 11.2.0]
+    CUDA available: True
+    MUSA available: False
+    numpy_random_seed: 646586057
+    GPU 0: NVIDIA GeForce RTX 4090
+    CUDA_HOME: /usr/local/cuda
+    NVCC: Cuda compilation tools, release 11.8, V11.8.89
+    GCC: gcc (Ubuntu 7.5.0-6ubuntu2) 7.5.0
+    PyTorch: 2.1.2
+    PyTorch compiling details: PyTorch built with:
+  - GCC 9.3
+  - C++ Version: 201703
+  - Intel(R) oneAPI Math Kernel Library Version 2023.1-Product Build 20230303 for Intel(R) 64 architecture applications
+  - Intel(R) MKL-DNN v3.1.1 (Git Hash 64f6bcbcbab628e96f33a62c3e975f8535a7bde4)
+  - OpenMP 201511 (a.k.a. OpenMP 4.5)
+  - LAPACK is enabled (usually provided by MKL)
+  - NNPACK is enabled
+  - CPU capability usage: AVX2
+  - CUDA Runtime 11.8
+  - NVCC architecture flags: -gencode;arch=compute_50,code=sm_50;-gencode;arch=compute_60,code=sm_60;-gencode;arch=compute_61,code=sm_61;-gencode;arch=compute_70,code=sm_70;-gencode;arch=compute_75,code=sm_75;-gencode;arch=compute_80,code=sm_80;-gencode;arch=compute_86,code=sm_86;-gencode;arch=compute_37,code=sm_37;-gencode;arch=compute_90,code=sm_90;-gencode;arch=compute_37,code=compute_37
+  - CuDNN 8.7
+  - Magma 2.6.1
+  - Build settings: BLAS_INFO=mkl, BUILD_TYPE=Release, CUDA_VERSION=11.8, CUDNN_VERSION=8.7.0, CXX_COMPILER=/opt/rh/devtoolset-9/root/usr/bin/c++, CXX_FLAGS= -D_GLIBCXX_USE_CXX11_ABI=0 -fabi-version=11 -fvisibility-inlines-hidden -DUSE_PTHREADPOOL -DNDEBUG -DUSE_KINETO -DLIBKINETO_NOROCTRACER -DUSE_FBGEMM -DUSE_QNNPACK -DUSE_PYTORCH_QNNPACK -DUSE_XNNPACK -DSYMBOLICATE_MOBILE_DEBUG_HANDLE -O2 -fPIC -Wall -Wextra -Werror=return-type -Werror=non-virtual-dtor -Werror=bool-operation -Wnarrowing -Wno-missing-field-initializers -Wno-type-limits -Wno-array-bounds -Wno-unknown-pragmas -Wno-unused-parameter -Wno-unused-function -Wno-unused-result -Wno-strict-overflow -Wno-strict-aliasing -Wno-stringop-overflow -Wno-psabi -Wno-error=pedantic -Wno-error=old-style-cast -Wno-invalid-partial-specialization -Wno-unused-private-field -Wno-aligned-allocation-unavailable -Wno-missing-braces -fdiagnostics-color=always -faligned-new -Wno-unused-but-set-variable -Wno-maybe-uninitialized -fno-math-errno -fno-trapping-math -Werror=format -Werror=cast-function-type -Wno-stringop-overflow, LAPACK_INFO=mkl, PERF_WITH_AVX=1, PERF_WITH_AVX2=1, PERF_WITH_AVX512=1, TORCH_DISABLE_GPU_ASSERTS=ON, TORCH_VERSION=2.1.2, USE_CUDA=ON, USE_CUDNN=ON, USE_EXCEPTION_PTR=1, USE_GFLAGS=OFF, USE_GLOG=OFF, USE_MKL=ON, USE_MKLDNN=ON, USE_MPI=OFF, USE_NCCL=ON, USE_NNPACK=ON, USE_OPENMP=ON, USE_ROCM=OFF, 
+
+    TorchVision: 0.16.2
+    OpenCV: 4.10.0
+    MMEngine: 0.10.5
+
+Runtime environment:
+    cudnn_benchmark: False
+    mp_cfg: {'mp_start_method': 'fork', 'opencv_num_threads': 0}
+    dist_cfg: {'backend': 'nccl'}
+    seed: 646586057
+    Distributed launcher: none
+    Distributed training: False
+    GPU number: 1
+------------------------------------------------------------
+
+12/03 09:01:33 - mmengine - INFO - Config:
+auto_scale_lr = dict(base_batch_size=16, enable=False)
+backend_args = None
+data_root = '/home/lcy/playground/label_anything/'
+dataset_type = 'CocoDataset'
+default_hooks = dict(
+    checkpoint=dict(interval=1, type='CheckpointHook'),
+    logger=dict(interval=50, type='LoggerHook'),
+    param_scheduler=dict(type='ParamSchedulerHook'),
+    sampler_seed=dict(type='DistSamplerSeedHook'),
+    timer=dict(type='IterTimerHook'),
+    visualization=dict(type='DetVisualizationHook'))
+default_scope = 'mmdet'
+env_cfg = dict(
+    cudnn_benchmark=False,
+    dist_cfg=dict(backend='nccl'),
+    mp_cfg=dict(mp_start_method='fork', opencv_num_threads=0))
+launcher = 'none'
+load_from = None
+log_level = 'INFO'
+log_processor = dict(by_epoch=True, type='LogProcessor', window_size=50)
+model = dict(
+    backbone=dict(
+        base_width=4,
+        depth=101,
+        frozen_stages=1,
+        groups=64,
+        init_cfg=dict(
+            checkpoint='open-mmlab://resnext101_64x4d', type='Pretrained'),
+        norm_cfg=dict(requires_grad=True, type='BN'),
+        norm_eval=True,
+        num_stages=4,
+        out_indices=(
+            0,
+            1,
+            2,
+            3,
+        ),
+        style='pytorch',
+        type='ResNeXt'),
+    data_preprocessor=dict(
+        bgr_to_rgb=True,
+        mean=[
+            123.675,
+            116.28,
+            103.53,
+        ],
+        pad_mask=True,
+        pad_size_divisor=32,
+        std=[
+            58.395,
+            57.12,
+            57.375,
+        ],
+        type='DetDataPreprocessor'),
+    neck=dict(
+        in_channels=[
+            256,
+            512,
+            1024,
+            2048,
+        ],
+        num_outs=5,
+        out_channels=256,
+        type='FPN'),
+    roi_head=dict(
+        bbox_head=[
+            dict(
+                bbox_coder=dict(
+                    target_means=[
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                    ],
+                    target_stds=[
+                        0.1,
+                        0.1,
+                        0.2,
+                        0.2,
+                    ],
+                    type='DeltaXYWHBBoxCoder'),
+                fc_out_channels=1024,
+                in_channels=256,
+                loss_bbox=dict(beta=1.0, loss_weight=1.0, type='SmoothL1Loss'),
+                loss_cls=dict(
+                    loss_weight=1.0,
+                    type='CrossEntropyLoss',
+                    use_sigmoid=False),
+                num_classes=1,
+                reg_class_agnostic=True,
+                roi_feat_size=7,
+                type='Shared2FCBBoxHead'),
+            dict(
+                bbox_coder=dict(
+                    target_means=[
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                    ],
+                    target_stds=[
+                        0.05,
+                        0.05,
+                        0.1,
+                        0.1,
+                    ],
+                    type='DeltaXYWHBBoxCoder'),
+                fc_out_channels=1024,
+                in_channels=256,
+                loss_bbox=dict(beta=1.0, loss_weight=1.0, type='SmoothL1Loss'),
+                loss_cls=dict(
+                    loss_weight=1.0,
+                    type='CrossEntropyLoss',
+                    use_sigmoid=False),
+                num_classes=1,
+                reg_class_agnostic=True,
+                roi_feat_size=7,
+                type='Shared2FCBBoxHead'),
+            dict(
+                bbox_coder=dict(
+                    target_means=[
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                    ],
+                    target_stds=[
+                        0.033,
+                        0.033,
+                        0.067,
+                        0.067,
+                    ],
+                    type='DeltaXYWHBBoxCoder'),
+                fc_out_channels=1024,
+                in_channels=256,
+                loss_bbox=dict(beta=1.0, loss_weight=1.0, type='SmoothL1Loss'),
+                loss_cls=dict(
+                    loss_weight=1.0,
+                    type='CrossEntropyLoss',
+                    use_sigmoid=False),
+                num_classes=1,
+                reg_class_agnostic=True,
+                roi_feat_size=7,
+                type='Shared2FCBBoxHead'),
+        ],
+        bbox_roi_extractor=dict(
+            featmap_strides=[
+                4,
+                8,
+                16,
+                32,
+            ],
+            out_channels=256,
+            roi_layer=dict(output_size=7, sampling_ratio=0, type='RoIAlign'),
+            type='SingleRoIExtractor'),
+        mask_head=dict(
+            conv_out_channels=256,
+            in_channels=256,
+            loss_mask=dict(
+                loss_weight=1.0, type='CrossEntropyLoss', use_mask=True),
+            num_classes=1,
+            num_convs=4,
+            type='FCNMaskHead'),
+        mask_roi_extractor=dict(
+            featmap_strides=[
+                4,
+                8,
+                16,
+                32,
+            ],
+            out_channels=256,
+            roi_layer=dict(output_size=14, sampling_ratio=0, type='RoIAlign'),
+            type='SingleRoIExtractor'),
+        num_stages=3,
+        stage_loss_weights=[
+            1,
+            0.5,
+            0.25,
+        ],
+        type='CascadeRoIHead'),
+    rpn_head=dict(
+        anchor_generator=dict(
+            ratios=[
+                0.5,
+                1.0,
+                2.0,
+            ],
+            scales=[
+                8,
+            ],
+            strides=[
+                4,
+                8,
+                16,
+                32,
+                64,
+            ],
+            type='AnchorGenerator'),
+        bbox_coder=dict(
+            target_means=[
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+            ],
+            target_stds=[
+                1.0,
+                1.0,
+                1.0,
+                1.0,
+            ],
+            type='DeltaXYWHBBoxCoder'),
+        feat_channels=256,
+        in_channels=256,
+        loss_bbox=dict(
+            beta=0.1111111111111111, loss_weight=1.0, type='SmoothL1Loss'),
+        loss_cls=dict(
+            loss_weight=1.0, type='CrossEntropyLoss', use_sigmoid=True),
+        type='RPNHead'),
+    test_cfg=dict(
+        rcnn=dict(
+            mask_thr_binary=0.5,
+            max_per_img=100,
+            nms=dict(iou_threshold=0.5, type='nms'),
+            score_thr=0.05),
+        rpn=dict(
+            max_per_img=1000,
+            min_bbox_size=0,
+            nms=dict(iou_threshold=0.7, type='nms'),
+            nms_pre=1000)),
+    train_cfg=dict(
+        rcnn=[
+            dict(
+                assigner=dict(
+                    ignore_iof_thr=-1,
+                    match_low_quality=False,
+                    min_pos_iou=0.5,
+                    neg_iou_thr=0.5,
+                    pos_iou_thr=0.5,
+                    type='MaxIoUAssigner'),
+                debug=False,
+                mask_size=28,
+                pos_weight=-1,
+                sampler=dict(
+                    add_gt_as_proposals=True,
+                    neg_pos_ub=-1,
+                    num=512,
+                    pos_fraction=0.25,
+                    type='RandomSampler')),
+            dict(
+                assigner=dict(
+                    ignore_iof_thr=-1,
+                    match_low_quality=False,
+                    min_pos_iou=0.6,
+                    neg_iou_thr=0.6,
+                    pos_iou_thr=0.6,
+                    type='MaxIoUAssigner'),
+                debug=False,
+                mask_size=28,
+                pos_weight=-1,
+                sampler=dict(
+                    add_gt_as_proposals=True,
+                    neg_pos_ub=-1,
+                    num=512,
+                    pos_fraction=0.25,
+                    type='RandomSampler')),
+            dict(
+                assigner=dict(
+                    ignore_iof_thr=-1,
+                    match_low_quality=False,
+                    min_pos_iou=0.7,
+                    neg_iou_thr=0.7,
+                    pos_iou_thr=0.7,
+                    type='MaxIoUAssigner'),
+                debug=False,
+                mask_size=28,
+                pos_weight=-1,
+                sampler=dict(
+                    add_gt_as_proposals=True,
+                    neg_pos_ub=-1,
+                    num=512,
+                    pos_fraction=0.25,
+                    type='RandomSampler')),
+        ],
+        rpn=dict(
+            allowed_border=0,
+            assigner=dict(
+                ignore_iof_thr=-1,
+                match_low_quality=True,
+                min_pos_iou=0.3,
+                neg_iou_thr=0.3,
+                pos_iou_thr=0.7,
+                type='MaxIoUAssigner'),
+            debug=False,
+            pos_weight=-1,
+            sampler=dict(
+                add_gt_as_proposals=False,
+                neg_pos_ub=-1,
+                num=256,
+                pos_fraction=0.5,
+                type='RandomSampler')),
+        rpn_proposal=dict(
+            max_per_img=2000,
+            min_bbox_size=0,
+            nms=dict(iou_threshold=0.7, type='nms'),
+            nms_pre=2000)),
+    type='CascadeRCNN')
+optim_wrapper = dict(
+    optimizer=dict(lr=0.01, type='AdamW', weight_decay=0.0001),
+    type='OptimWrapper')
+param_scheduler = [
+    dict(
+        begin=0, by_epoch=False, end=500, start_factor=0.001, type='LinearLR'),
+    dict(
+        begin=0,
+        by_epoch=True,
+        end=100,
+        gamma=0.1,
+        milestones=[
+            70,
+            90,
+        ],
+        type='MultiStepLR'),
+]
+resume = False
+test_cfg = dict(type='TestLoop')
+test_dataloader = dict(
+    batch_size=1,
+    dataset=dict(
+        ann_file='/home/lcy/playground/label_anything/tools/test_new_p_bg.json',
+        backend_args=None,
+        data_prefix=dict(img='data/'),
+        data_root='/home/lcy/playground/label_anything/',
+        pipeline=[
+            dict(backend_args=None, type='LoadImageFromFile'),
+            dict(keep_ratio=True, scale=(
+                512,
+                512,
+            ), type='Resize'),
+            dict(type='LoadAnnotations', with_bbox=True, with_mask=True),
+            dict(
+                meta_keys=(
+                    'img_id',
+                    'img_path',
+                    'ori_shape',
+                    'img_shape',
+                    'scale_factor',
+                ),
+                type='PackDetInputs'),
+        ],
+        test_mode=True,
+        type='CocoDataset'),
+    drop_last=False,
+    num_workers=2,
+    persistent_workers=True,
+    sampler=dict(shuffle=False, type='DefaultSampler'))
+test_evaluator = dict(
+    ann_file='/home/lcy/playground/label_anything/tools/test_new_p_bg.json',
+    backend_args=None,
+    format_only=False,
+    metric=[
+        'bbox',
+        'segm',
+    ],
+    type='CocoMetric')
+test_pipeline = [
+    dict(backend_args=None, type='LoadImageFromFile'),
+    dict(keep_ratio=True, scale=(
+        512,
+        512,
+    ), type='Resize'),
+    dict(type='LoadAnnotations', with_bbox=True, with_mask=True),
+    dict(
+        meta_keys=(
+            'img_id',
+            'img_path',
+            'ori_shape',
+            'img_shape',
+            'scale_factor',
+        ),
+        type='PackDetInputs'),
+]
+train_cfg = dict(max_epochs=100, type='EpochBasedTrainLoop', val_interval=1)
+train_dataloader = dict(
+    batch_sampler=dict(type='AspectRatioBatchSampler'),
+    batch_size=4,
+    dataset=dict(
+        ann_file=
+        '/home/lcy/playground/label_anything/tools/train_new_p_bg.json',
+        backend_args=None,
+        data_prefix=dict(img='data/'),
+        data_root='/home/lcy/playground/label_anything/',
+        filter_cfg=dict(filter_empty_gt=True, min_size=32),
+        pipeline=[
+            dict(backend_args=None, type='LoadImageFromFile'),
+            dict(type='LoadAnnotations', with_bbox=True, with_mask=True),
+            dict(keep_ratio=True, scale=(
+                512,
+                512,
+            ), type='Resize'),
+            dict(prob=0.5, type='RandomFlip'),
+            dict(type='PackDetInputs'),
+        ],
+        type='CocoDataset'),
+    num_workers=2,
+    persistent_workers=True,
+    sampler=dict(shuffle=True, type='DefaultSampler'))
+train_pipeline = [
+    dict(backend_args=None, type='LoadImageFromFile'),
+    dict(type='LoadAnnotations', with_bbox=True, with_mask=True),
+    dict(keep_ratio=True, scale=(
+        512,
+        512,
+    ), type='Resize'),
+    dict(prob=0.5, type='RandomFlip'),
+    dict(type='PackDetInputs'),
+]
+val_cfg = dict(type='ValLoop')
+val_dataloader = dict(
+    batch_size=1,
+    dataset=dict(
+        ann_file='/home/lcy/playground/label_anything/tools/val_new_p_bg.json',
+        backend_args=None,
+        data_prefix=dict(img='data/'),
+        data_root='/home/lcy/playground/label_anything/',
+        pipeline=[
+            dict(backend_args=None, type='LoadImageFromFile'),
+            dict(keep_ratio=True, scale=(
+                512,
+                512,
+            ), type='Resize'),
+            dict(type='LoadAnnotations', with_bbox=True, with_mask=True),
+            dict(
+                meta_keys=(
+                    'img_id',
+                    'img_path',
+                    'ori_shape',
+                    'img_shape',
+                    'scale_factor',
+                ),
+                type='PackDetInputs'),
+        ],
+        test_mode=True,
+        type='CocoDataset'),
+    drop_last=False,
+    num_workers=2,
+    persistent_workers=True,
+    sampler=dict(shuffle=False, type='DefaultSampler'))
+val_evaluator = dict(
+    ann_file='/home/lcy/playground/label_anything/tools/val_new_p_bg.json',
+    backend_args=None,
+    format_only=False,
+    metric=[
+        'bbox',
+        'segm',
+    ],
+    type='CocoMetric')
+vis_backends = [
+    dict(type='LocalVisBackend'),
+]
+visualizer = dict(
+    name='visualizer',
+    type='DetLocalVisualizer',
+    vis_backends=[
+        dict(type='LocalVisBackend'),
+    ])
+work_dir = './work_dirs/x101-64x4d_fpn_20e_coco'
+
+12/03 09:01:37 - mmengine - INFO - Distributed training is not used, all SyncBatchNorm (SyncBN) layers in the model will be automatically reverted to BatchNormXd layers if they are used.
+12/03 09:01:37 - mmengine - INFO - Hooks will be executed in the following order:
+before_run:
+(VERY_HIGH   ) RuntimeInfoHook                    
+(BELOW_NORMAL) LoggerHook                         
+ -------------------- 
+before_train:
+(VERY_HIGH   ) RuntimeInfoHook                    
+(NORMAL      ) IterTimerHook                      
+(VERY_LOW    ) CheckpointHook                     
+ -------------------- 
+before_train_epoch:
+(VERY_HIGH   ) RuntimeInfoHook                    
+(NORMAL      ) IterTimerHook                      
+(NORMAL      ) DistSamplerSeedHook                
+ -------------------- 
+before_train_iter:
+(VERY_HIGH   ) RuntimeInfoHook                    
+(NORMAL      ) IterTimerHook                      
+ -------------------- 
+after_train_iter:
+(VERY_HIGH   ) RuntimeInfoHook                    
+(NORMAL      ) IterTimerHook                      
+(BELOW_NORMAL) LoggerHook                         
+(LOW         ) ParamSchedulerHook                 
+(VERY_LOW    ) CheckpointHook                     
+ -------------------- 
+after_train_epoch:
+(NORMAL      ) IterTimerHook                      
+(LOW         ) ParamSchedulerHook                 
+(VERY_LOW    ) CheckpointHook                     
+ -------------------- 
+before_val:
+(VERY_HIGH   ) RuntimeInfoHook                    
+ -------------------- 
+before_val_epoch:
+(NORMAL      ) IterTimerHook                      
+ -------------------- 
+before_val_iter:
+(NORMAL      ) IterTimerHook                      
+ -------------------- 
+after_val_iter:
+(NORMAL      ) IterTimerHook                      
+(NORMAL      ) DetVisualizationHook               
+(BELOW_NORMAL) LoggerHook                         
+ -------------------- 
+after_val_epoch:
+(VERY_HIGH   ) RuntimeInfoHook                    
+(NORMAL      ) IterTimerHook                      
+(BELOW_NORMAL) LoggerHook                         
+(LOW         ) ParamSchedulerHook                 
+(VERY_LOW    ) CheckpointHook                     
+ -------------------- 
+after_val:
+(VERY_HIGH   ) RuntimeInfoHook                    
+ -------------------- 
+after_train:
+(VERY_HIGH   ) RuntimeInfoHook                    
+(VERY_LOW    ) CheckpointHook                     
+ -------------------- 
+before_test:
+(VERY_HIGH   ) RuntimeInfoHook                    
+ -------------------- 
+before_test_epoch:
+(NORMAL      ) IterTimerHook                      
+ -------------------- 
+before_test_iter:
+(NORMAL      ) IterTimerHook                      
+ -------------------- 
+after_test_iter:
+(NORMAL      ) IterTimerHook                      
+(NORMAL      ) DetVisualizationHook               
+(BELOW_NORMAL) LoggerHook                         
+ -------------------- 
+after_test_epoch:
+(VERY_HIGH   ) RuntimeInfoHook                    
+(NORMAL      ) IterTimerHook                      
+(BELOW_NORMAL) LoggerHook                         
+ -------------------- 
+after_test:
+(VERY_HIGH   ) RuntimeInfoHook                    
+ -------------------- 
+after_run:
+(BELOW_NORMAL) LoggerHook                         
+ -------------------- 
+loading annotations into memory...
+Done (t=0.41s)
+creating index...
+index created!
+loading annotations into memory...
+Done (t=0.02s)
+creating index...
+index created!
+loading annotations into memory...
+Done (t=0.02s)
+creating index...
+index created!
+12/03 09:01:39 - mmengine - INFO - load model from: open-mmlab://resnext101_64x4d
+12/03 09:01:39 - mmengine - INFO - Loads checkpoint by openmmlab backend from path: open-mmlab://resnext101_64x4d
+12/03 09:01:39 - mmengine - WARNING - "FileClient" will be deprecated in future. Please use io functions in https://mmengine.readthedocs.io/en/latest/api/fileio.html#file-io
+12/03 09:01:39 - mmengine - WARNING - "HardDiskBackend" is the alias of "LocalBackend" and the former will be deprecated in future.
+12/03 09:01:39 - mmengine - INFO - Checkpoints will be saved to /home/lcy/playground/label_anything/mmdetection-3.3.0/work_dirs/x101-64x4d_fpn_20e_coco.
+12/03 09:02:10 - mmengine - INFO - Epoch(train)   [1][ 50/787]  lr: 9.9098e-04  eta: 13:29:53  time: 0.6178  data_time: 0.0188  memory: 7114  loss: 1.3517  loss_rpn_cls: 0.1237  loss_rpn_bbox: 0.0183  s0.loss_cls: 0.1994  s0.acc: 95.1172  s0.loss_bbox: 0.0971  s0.loss_mask: 0.4499  s1.loss_cls: 0.0671  s1.acc: 94.7266  s1.loss_bbox: 0.0497  s1.loss_mask: 0.2073  s2.loss_cls: 0.0243  s2.acc: 94.7266  s2.loss_bbox: 0.0153  s2.loss_mask: 0.0997
+12/03 09:02:40 - mmengine - INFO - Epoch(train)   [1][100/787]  lr: 1.9920e-03  eta: 13:15:58  time: 0.5974  data_time: 0.0140  memory: 7472  loss: 0.6749  loss_rpn_cls: 0.0156  loss_rpn_bbox: 0.0186  s0.loss_cls: 0.0751  s0.acc: 95.7031  s0.loss_bbox: 0.0598  s0.loss_mask: 0.1862  s1.loss_cls: 0.0408  s1.acc: 95.7520  s1.loss_bbox: 0.0601  s1.loss_mask: 0.0990  s2.loss_cls: 0.0271  s2.acc: 96.3379  s2.loss_bbox: 0.0437  s2.loss_mask: 0.0488
+12/03 09:03:05 - mmengine - INFO - Epoch(train)   [1][150/787]  lr: 2.9930e-03  eta: 12:28:38  time: 0.5003  data_time: 0.0131  memory: 6913  loss: 14106489003874470.0000  loss_rpn_cls: 1831530726127.7932  loss_rpn_bbox: 9026959051103.9023  s0.loss_cls: 478887.6882  s0.acc: 100.0000  s0.loss_bbox: 2716060848255509.0000  s0.loss_mask: 13338737470369.2148  s1.loss_cls: 5274.8549  s1.acc: 100.0000  s1.loss_bbox: 7664636917654528.0000  s1.loss_mask: 1936881941137.9675  s2.loss_cls: 1154.3935  s2.acc: 100.0000  s2.loss_bbox: 3688173943052631.5000  s2.loss_mask: 11483545487452.7129
+12/03 09:03:28 - mmengine - INFO - Epoch(train)   [1][200/787]  lr: 3.9940e-03  eta: 11:54:33  time: 0.4691  data_time: 0.0129  memory: 5903  loss: 101545328720409051136.0000  loss_rpn_cls: 78474957007126592.0000  loss_rpn_bbox: 174795021240960704.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 24362452183133900800.0000  s0.loss_mask: 99924336853061056.0000  s1.loss_cls: 0.0000  s1.acc: 100.0000  s1.loss_bbox: 52698768719493128192.0000  s1.loss_mask: 179851004621558656.0000  s2.loss_cls: 0.0000  s2.acc: 100.0000  s2.loss_bbox: 23899977829538476032.0000  s2.loss_mask: 51088961408051976.0000
+12/03 09:03:52 - mmengine - INFO - Epoch(train)   [1][250/787]  lr: 4.9950e-03  eta: 11:33:23  time: 0.4670  data_time: 0.0131  memory: 5904  loss: 114763196273744265216.0000  loss_rpn_cls: 319860088517678848.0000  loss_rpn_bbox: 315331674269580032.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 31777603881948925952.0000  s0.loss_mask: 8351603589298677760.0000  s1.loss_cls: 0.0000  s1.acc: 100.0000  s1.loss_bbox: 42725446077280313344.0000  s1.loss_mask: 3638463659524741120.0000  s2.loss_cls: 0.0000  s2.acc: 100.0000  s2.loss_bbox: 26352848965745823744.0000  s2.loss_mask: 1282034478284852480.0000
+12/03 09:04:15 - mmengine - INFO - Epoch(train)   [1][300/787]  lr: 5.9960e-03  eta: 11:19:37  time: 0.4691  data_time: 0.0139  memory: 5905  loss: 324922119208953511936.0000  loss_rpn_cls: 833119991972547840.0000  loss_rpn_bbox: 1608902268715710464.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 115953163128195923968.0000  s0.loss_mask: 14921481125127489536.0000  s1.loss_cls: 0.0000  s1.acc: 100.0000  s1.loss_bbox: 93101350169547292672.0000  s1.loss_mask: 12672935056248385536.0000  s2.loss_cls: 0.0000  s2.acc: 100.0000  s2.loss_bbox: 82428439632933306368.0000  s2.loss_mask: 3402735007037055488.0000
+12/03 09:04:38 - mmengine - INFO - Epoch(train)   [1][350/787]  lr: 6.9970e-03  eta: 11:09:28  time: 0.4681  data_time: 0.0125  memory: 5905  loss: 360033827663246262272.0000  loss_rpn_cls: 875678899536197120.0000  loss_rpn_bbox: 1216563698799843840.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 161102914462421942272.0000  s0.loss_mask: 8558744816661425152.0000  s1.loss_cls: 0.0000  s1.acc: 100.0000  s1.loss_bbox: 108813197680214081536.0000  s1.loss_mask: 6586792182400135168.0000  s2.loss_cls: 0.0000  s2.acc: 100.0000  s2.loss_bbox: 57176893439124185088.0000  s2.loss_mask: 15703034901627027456.0000
+12/03 09:05:02 - mmengine - INFO - Epoch(train)   [1][400/787]  lr: 7.9980e-03  eta: 11:02:12  time: 0.4707  data_time: 0.0124  memory: 5904  loss: 324749777853836820480.0000  loss_rpn_cls: 1192757771092245760.0000  loss_rpn_bbox: 4292929154144817664.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 130010142988740165632.0000  s0.loss_mask: 28230304627282505728.0000  s1.loss_cls: 0.0000  s1.acc: 100.0000  s1.loss_bbox: 92468430584103583744.0000  s1.loss_mask: 13244391782463506432.0000  s2.loss_cls: 0.0000  s2.acc: 100.0000  s2.loss_bbox: 51737305999582478336.0000  s2.loss_mask: 3573515735115025408.0000
+12/03 09:05:26 - mmengine - INFO - Epoch(train)   [1][450/787]  lr: 8.9990e-03  eta: 10:56:43  time: 0.4725  data_time: 0.0132  memory: 5905  loss: 5022200957054503354368.0000  loss_rpn_cls: 9084843689753056256.0000  loss_rpn_bbox: 36039807066781433856.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 2005817034979786358784.0000  s0.loss_mask: 80540670870004121600.0000  s1.loss_cls: 0.0000  s1.acc: 100.0000  s1.loss_bbox: 1764393395246676049920.0000  s1.loss_mask: 2411649111897218560.0000  s2.loss_cls: 0.0000  s2.acc: 100.0000  s2.loss_bbox: 1118862227274482843648.0000  s2.loss_mask: 5051315504400480256.0000
+12/03 09:05:49 - mmengine - INFO - Epoch(train)   [1][500/787]  lr: 1.0000e-02  eta: 10:52:04  time: 0.4712  data_time: 0.0146  memory: 5905  loss: 4462402738650373878185984.0000  loss_rpn_cls: 5174466828257538867200.0000  loss_rpn_bbox: 22591004197768023506944.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 1649048151220008215642112.0000  s0.loss_mask: 23056493083436869746688.0000  s1.loss_cls: 0.0000  s1.acc: 100.0000  s1.loss_bbox: 2568110768881450409263104.0000  s1.loss_mask: 0.2876  s2.loss_cls: 0.0000  s2.acc: 100.0000  s2.loss_bbox: 194421618303113157935104.0000  s2.loss_mask: 352233805623622400.0000
+12/03 09:06:13 - mmengine - INFO - Epoch(train)   [1][550/787]  lr: 1.0000e-02  eta: 10:48:26  time: 0.4731  data_time: 0.0132  memory: 5905  loss: 55405914170775319561109504.0000  loss_rpn_cls: 15890804088541412327424.0000  loss_rpn_bbox: 94169916426520685969408.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 20214528797020113701175296.0000  s0.loss_mask: 108365976630347824103424.0000  s1.loss_cls: 0.0000  s1.acc: 100.0000  s1.loss_bbox: 32437151562911294905384960.0000  s1.loss_mask: 0.2859  s2.loss_cls: 0.0000  s2.acc: 100.0000  s2.loss_bbox: 2535807529077800433614848.0000  s2.loss_mask: 0.1426
+12/03 09:06:36 - mmengine - INFO - Epoch(train)   [1][600/787]  lr: 1.0000e-02  eta: 10:45:06  time: 0.4709  data_time: 0.0136  memory: 5904  loss: 93594431809125260223053824.0000  loss_rpn_cls: 18844410208031132876800.0000  loss_rpn_bbox: 153863234820138615177216.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 32546604485886863279652864.0000  s0.loss_mask: 0.5666  s1.loss_cls: 0.0000  s1.acc: 100.0000  s1.loss_bbox: 55868365247912143367438336.0000  s1.loss_mask: 0.2837  s2.loss_cls: 0.0000  s2.acc: 100.0000  s2.loss_bbox: 5006754551390022615957504.0000  s2.loss_mask: 0.1417
+12/03 09:07:00 - mmengine - INFO - Epoch(train)   [1][650/787]  lr: 1.0000e-02  eta: 10:42:14  time: 0.4710  data_time: 0.0133  memory: 5905  loss: 20069431584994279370522624.0000  loss_rpn_cls: 10042644605136359391232.0000  loss_rpn_bbox: 67411616778771815727104.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 10705237271054424645566464.0000  s0.loss_mask: 135706216731425286127616.0000  s1.loss_cls: 0.0000  s1.acc: 100.0000  s1.loss_bbox: 7330398629003169779154944.0000  s1.loss_mask: 0.2873  s2.loss_cls: 0.0000  s2.acc: 100.0000  s2.loss_bbox: 1820633931711560961490944.0000  s2.loss_mask: 1334623101854039296.0000
+12/03 09:07:23 - mmengine - INFO - Epoch(train)   [1][700/787]  lr: 1.0000e-02  eta: 10:39:40  time: 0.4706  data_time: 0.0140  memory: 5904  loss: 14282786382451227729330176.0000  loss_rpn_cls: 6091943831315807207424.0000  loss_rpn_bbox: 26537996529974321872896.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 7871470138669271902846976.0000  s0.loss_mask: 0.5687  s1.loss_cls: 0.0000  s1.acc: 100.0000  s1.loss_bbox: 5111685662181327407939584.0000  s1.loss_mask: 0.2844  s2.loss_cls: 0.0000  s2.acc: 100.0000  s2.loss_bbox: 1266999460108410625720320.0000  s2.loss_mask: 1216728275429013504.0000
+12/03 09:07:47 - mmengine - INFO - Epoch(train)   [1][750/787]  lr: 1.0000e-02  eta: 10:37:32  time: 0.4721  data_time: 0.0133  memory: 5905  loss: 27384127106051289697484800.0000  loss_rpn_cls: 9908900500500146814976.0000  loss_rpn_bbox: 74611919418594106015744.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 13450261521861108677214208.0000  s0.loss_mask: 456314237376806718013440.0000  s1.loss_cls: 0.0000  s1.acc: 100.0000  s1.loss_bbox: 10407457580427289693257728.0000  s1.loss_mask: 0.2853  s2.loss_cls: 0.0000  s2.acc: 100.0000  s2.loss_bbox: 2472433599300262680330240.0000  s2.loss_mask: 513138821447471517925376.0000
+12/03 09:08:05 - mmengine - INFO - Exp name: x101-64x4d_fpn_20e_coco_20241203_090132
+12/03 09:08:05 - mmengine - INFO - Saving checkpoint at 1 epochs
+12/03 09:08:25 - mmengine - INFO - Epoch(val)   [1][ 50/703]    eta: 0:00:56  time: 0.0861  data_time: 0.0134  memory: 5905  
+12/03 09:08:29 - mmengine - INFO - Epoch(val)   [1][100/703]    eta: 0:00:48  time: 0.0755  data_time: 0.0051  memory: 1748  
+12/03 09:08:33 - mmengine - INFO - Epoch(val)   [1][150/703]    eta: 0:00:44  time: 0.0786  data_time: 0.0066  memory: 1748  
+12/03 09:08:37 - mmengine - INFO - Epoch(val)   [1][200/703]    eta: 0:00:39  time: 0.0775  data_time: 0.0068  memory: 1748  
+12/03 09:08:40 - mmengine - INFO - Epoch(val)   [1][250/703]    eta: 0:00:35  time: 0.0747  data_time: 0.0047  memory: 1748  
+12/03 09:08:44 - mmengine - INFO - Epoch(val)   [1][300/703]    eta: 0:00:31  time: 0.0737  data_time: 0.0038  memory: 1748  
+12/03 09:08:48 - mmengine - INFO - Epoch(val)   [1][350/703]    eta: 0:00:27  time: 0.0744  data_time: 0.0041  memory: 1748  
+12/03 09:08:52 - mmengine - INFO - Epoch(val)   [1][400/703]    eta: 0:00:23  time: 0.0779  data_time: 0.0065  memory: 1748  
+12/03 09:08:56 - mmengine - INFO - Epoch(val)   [1][450/703]    eta: 0:00:19  time: 0.0778  data_time: 0.0070  memory: 1748  
+12/03 09:08:59 - mmengine - INFO - Epoch(val)   [1][500/703]    eta: 0:00:15  time: 0.0759  data_time: 0.0052  memory: 1748  
+12/03 09:09:03 - mmengine - INFO - Epoch(val)   [1][550/703]    eta: 0:00:11  time: 0.0733  data_time: 0.0036  memory: 1748  
+12/03 09:09:07 - mmengine - INFO - Epoch(val)   [1][600/703]    eta: 0:00:07  time: 0.0727  data_time: 0.0035  memory: 1748  
+12/03 09:09:10 - mmengine - INFO - Epoch(val)   [1][650/703]    eta: 0:00:04  time: 0.0730  data_time: 0.0035  memory: 1748  
+12/03 09:09:14 - mmengine - INFO - Epoch(val)   [1][700/703]    eta: 0:00:00  time: 0.0727  data_time: 0.0037  memory: 1748  
+12/03 09:09:14 - mmengine - INFO - Evaluating bbox...
+Loading and preparing results...
+12/03 09:09:14 - mmengine - ERROR - /home/lcy/playground/label_anything/mmdetection-3.3.0/mmdet/evaluation/metrics/coco_metric.py - compute_metrics - 465 - The testing results of the whole dataset is empty.
+12/03 09:09:14 - mmengine - INFO - Epoch(val) [1][703/703]    data_time: 0.0055  time: 0.0760
+12/03 09:09:14 - mmengine - WARNING - Since `metrics` is an empty dict, the behavior to save the best checkpoint will be skipped in this evaluation.
+12/03 09:09:39 - mmengine - INFO - Epoch(train)   [2][ 50/787]  lr: 1.0000e-02  eta: 10:37:15  time: 0.5034  data_time: 0.0141  memory: 5906  loss: 150504199346807383185686528.0000  loss_rpn_cls: 11382264446554841546752.0000  loss_rpn_bbox: 83968154957176203378688.0000  s0.loss_cls: 146065831556998933872902144.0000  s0.acc: 0.6017  s0.loss_bbox: 1233238917750126328938496.0000  s0.loss_mask: 1092759939120893261774848.0000  s1.loss_cls: 811304959023086670184448.0000  s1.acc: 99.3983  s1.loss_bbox: 693988152749882718814208.0000  s1.loss_mask: 0.2869  s2.loss_cls: 37489419361249656832000.0000  s2.acc: 99.3983  s2.loss_bbox: 177778494194118436061184.0000  s2.loss_mask: 296457047547833900597248.0000
+12/03 09:10:05 - mmengine - INFO - Epoch(train)   [2][100/787]  lr: 1.0000e-02  eta: 10:37:52  time: 0.5053  data_time: 0.0131  memory: 5906  loss: 148914379529301862205358080.0000  loss_rpn_cls: 6707287300463060320256.0000  loss_rpn_bbox: 31002882708292983848960.0000  s0.loss_cls: 146744968454789870303313920.0000  s0.acc: 1.2107  s0.loss_bbox: 197061604062721784938496.0000  s0.loss_mask: 1759924175411950747910144.0000  s1.loss_cls: 115154553962853488918528.0000  s1.acc: 98.7894  s1.loss_bbox: 45707465053819382005760.0000  s1.loss_mask: 0.2841  s2.loss_cls: 1520443915093031256064.0000  s2.acc: 98.7894  s2.loss_bbox: 12331645384604086435840.0000  s2.loss_mask: 0.1420
+12/03 09:10:31 - mmengine - INFO - Epoch(train)   [2][150/787]  lr: 1.0000e-02  eta: 10:39:14  time: 0.5174  data_time: 0.0130  memory: 5904  loss: 119543744828396251652292608.0000  loss_rpn_cls: 8196524808278871375872.0000  loss_rpn_bbox: 57401748848180002291712.0000  s0.loss_cls: 115640949752548366663811072.0000  s0.acc: 0.8212  s0.loss_bbox: 264303674096537963593728.0000  s0.loss_mask: 3135617137444402822643712.0000  s1.loss_cls: 92712754930256256696320.0000  s1.acc: 99.1788  s1.loss_bbox: 47544723693306422231040.0000  s1.loss_mask: 0.2877  s2.loss_cls: 9765749439690002399232.0000  s2.acc: 99.3613  s2.loss_bbox: 11969592864673944829952.0000  s2.loss_mask: 275281920498079774015488.0000
+12/03 09:10:56 - mmengine - INFO - Epoch(train)   [2][200/787]  lr: 1.0000e-02  eta: 10:40:07  time: 0.5130  data_time: 0.0130  memory: 5905  loss: 82858697095260689026514944.0000  loss_rpn_cls: 8304231369261628522496.0000  loss_rpn_bbox: 60445627338734616707072.0000  s0.loss_cls: 82031406648181281603452928.0000  s0.acc: 0.9156  s0.loss_bbox: 93627289399889336729600.0000  s0.loss_mask: 564111273959079878328320.0000  s1.loss_cls: 65416929561986975399936.0000  s1.acc: 99.2879  s1.loss_bbox: 27297557092397999980544.0000  s1.loss_mask: 0.2852  s2.loss_cls: 790238380101570789376.0000  s2.acc: 99.2879  s2.loss_bbox: 7296498776324734713856.0000  s2.loss_mask: 0.1426
+12/03 09:11:03 - mmengine - INFO - Exp name: x101-64x4d_fpn_20e_coco_20241203_090132
+12/03 09:11:22 - mmengine - INFO - Epoch(train)   [2][250/787]  lr: 1.0000e-02  eta: 10:40:50  time: 0.5124  data_time: 0.0130  memory: 5906  loss: 85974377994751942359777280.0000  loss_rpn_cls: 4223510707332344446976.0000  loss_rpn_bbox: 17802447238403410886656.0000  s0.loss_cls: 84856879081036940507611136.0000  s0.acc: 0.6568  s0.loss_bbox: 148704863741896399257600.0000  s0.loss_mask: 731995060068569101369344.0000  s1.loss_cls: 90263096897881881182208.0000  s1.acc: 99.3432  s1.loss_bbox: 44388573540562958811136.0000  s1.loss_mask: 0.2859  s2.loss_cls: 6593323116572874637312.0000  s2.acc: 99.3432  s2.loss_bbox: 11200393627959025467392.0000  s2.loss_mask: 62329837577782115172352.0000
+12/03 09:11:48 - mmengine - INFO - Epoch(train)   [2][300/787]  lr: 1.0000e-02  eta: 10:41:39  time: 0.5158  data_time: 0.0141  memory: 5905  loss: 74143214512950762415325184.0000  loss_rpn_cls: 6909350290870543319040.0000  loss_rpn_bbox: 52337002936520962736128.0000  s0.loss_cls: 70637609058124195354902528.0000  s0.acc: 0.7387  s0.loss_bbox: 204120081988943681159168.0000  s0.loss_mask: 3153382262795373803208704.0000  s1.loss_cls: 57754868528914750242816.0000  s1.acc: 99.2613  s1.loss_bbox: 24316724873018162020352.0000  s1.loss_mask: 0.2854  s2.loss_cls: 691575957390279966720.0000  s2.acc: 99.2613  s2.loss_bbox: 6093022700976165879808.0000  s2.loss_mask: 0.1427
+12/03 09:12:13 - mmengine - INFO - Epoch(train)   [2][350/787]  lr: 1.0000e-02  eta: 10:41:37  time: 0.5026  data_time: 0.0142  memory: 5905  loss: 405182491747518905686912139264.0000  loss_rpn_cls: 579819952083009138530975744.0000  loss_rpn_bbox: 420822535856733104688332800.0000  s0.loss_cls: 68269036143247169880588288.0000  s0.acc: 100.0000  s0.loss_bbox: 56700769705511005482035183616.0000  s0.loss_mask: 3958649287292162774073868288.0000  s1.loss_cls: 176700016018766042243335716864.0000  s1.acc: 0.0000  s1.loss_bbox: 106170301065526722929761452032.0000  s1.loss_mask: 0.2868  s2.loss_cls: 26594211565465891500520898560.0000  s2.acc: 0.0000  s2.loss_bbox: 33920774417141629504716800000.0000  s2.loss_mask: 68856031790738833483497472.0000
+12/03 09:12:36 - mmengine - INFO - Epoch(train)   [2][400/787]  lr: 1.0000e-02  eta: 10:39:56  time: 0.4732  data_time: 0.0130  memory: 5905  loss: 1764304388730391151199075172352.0000  loss_rpn_cls: 2507036711952669234784370688.0000  loss_rpn_bbox: 1679508463468187081573924864.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 249065787067504108610514845696.0000  s0.loss_mask: 15792826150815452317354033152.0000  s1.loss_cls: 770107357399123016154976616448.0000  s1.acc: 0.0000  s1.loss_bbox: 460538417902751215873490419712.0000  s1.loss_mask: 0.2851  s2.loss_cls: 116383377812579542302053105664.0000  s2.acc: 0.0000  s2.loss_bbox: 147934683398307238553583616000.0000  s2.loss_mask: 295384160378337333667168256.0000
+12/03 09:13:00 - mmengine - INFO - Epoch(train)   [2][450/787]  lr: 1.0000e-02  eta: 10:38:27  time: 0.4748  data_time: 0.0137  memory: 5903  loss: 1776619629918840686023482015744.0000  loss_rpn_cls: 2496172819314456392017903616.0000  loss_rpn_bbox: 1996875817207372100203970560.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 250565585539473817656497274880.0000  s0.loss_mask: 15953807315057062464333021184.0000  s1.loss_cls: 775500790293095749061475041280.0000  s1.acc: 0.0000  s1.loss_bbox: 463693354636514079555792666624.0000  s1.loss_mask: 0.2845  s2.loss_cls: 117194202754190467099099398144.0000  s2.acc: 0.0000  s2.loss_bbox: 148923868627424960267375607808.0000  s2.loss_mask: 294978092201042765307445248.0000
+12/03 09:13:24 - mmengine - INFO - Epoch(train)   [2][500/787]  lr: 1.0000e-02  eta: 10:37:01  time: 0.4740  data_time: 0.0144  memory: 5905  loss: 1775459162379548023481958400000.0000  loss_rpn_cls: 2527751537812603987883458560.0000  loss_rpn_bbox: 1763010767279712214861217792.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 250319988670220560462851866624.0000  s0.loss_mask: 16030379165314179525542674432.0000  s1.loss_cls: 775179454787927642849264271360.0000  s1.acc: 0.0000  s1.loss_bbox: 463174247178622012972676939776.0000  s1.loss_mask: 0.2858  s2.loss_cls: 117223944218299580124655255552.0000  s2.acc: 0.0000  s2.loss_bbox: 148941642670393188556468125696.0000  s2.loss_mask: 298759959184946838615621632.0000
+12/03 09:13:47 - mmengine - INFO - Epoch(train)   [2][550/787]  lr: 1.0000e-02  eta: 10:35:34  time: 0.4723  data_time: 0.0128  memory: 5904  loss: 1720471200186364752504897404928.0000  loss_rpn_cls: 2523401258390835761229332480.0000  loss_rpn_bbox: 1493027636616031839499321344.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 242245998889576566028075270144.0000  s0.loss_mask: 15649474135532454885766201344.0000  s1.loss_cls: 751374490429266876067479552000.0000  s1.acc: 0.0000  s1.loss_bbox: 449120071979666008139261542400.0000  s1.loss_mask: 0.2861  s2.loss_cls: 113523772967394225861295079424.0000  s2.acc: 0.0000  s2.loss_bbox: 144242101651471166226581946368.0000  s2.loss_mask: 298869950110095639903731712.0000
+12/03 09:14:11 - mmengine - INFO - Epoch(train)   [2][600/787]  lr: 1.0000e-02  eta: 10:34:16  time: 0.4739  data_time: 0.0130  memory: 5905  loss: 1747655739341117529951353962496.0000  loss_rpn_cls: 2450245104665216591285190656.0000  loss_rpn_bbox: 1826578135201511394561228800.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 245824616143870872984643174400.0000  s0.loss_mask: 16006854779321178189973159936.0000  s1.loss_cls: 763384228507313505950498816000.0000  s1.acc: 0.0000  s1.loss_bbox: 455851141247374533789732569088.0000  s1.loss_mask: 0.2855  s2.loss_cls: 115420073985207843002693713920.0000  s2.acc: 0.0000  s2.loss_bbox: 146590615161421759760643915776.0000  s2.loss_mask: 301399231151576541298688000.0000
+12/03 09:14:35 - mmengine - INFO - Epoch(train)   [2][650/787]  lr: 1.0000e-02  eta: 10:32:51  time: 0.4698  data_time: 0.0124  memory: 5904  loss: 1688978774765997599522260254720.0000  loss_rpn_cls: 2518142239229373757740023808.0000  loss_rpn_bbox: 1654186124243334743524900864.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 237580081497801868165246877696.0000  s0.loss_mask: 15252570023254675266381807616.0000  s1.loss_cls: 737417200056652115614657150976.0000  s1.acc: 0.0000  s1.loss_bbox: 441889775661379676741379817472.0000  s1.loss_mask: 0.2868  s2.loss_cls: 111099060768585978519209639936.0000  s2.acc: 0.0000  s2.loss_bbox: 141251053135339035247945711616.0000  s2.loss_mask: 316688572586853597976723456.0000
+12/03 09:14:58 - mmengine - INFO - Epoch(train)   [2][700/787]  lr: 1.0000e-02  eta: 10:31:32  time: 0.4705  data_time: 0.0127  memory: 5905  loss: 1669506136619552200815192047616.0000  loss_rpn_cls: 2414940456720959035160920064.0000  loss_rpn_bbox: 1766148131957927137465335808.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 235517153856481471980499894272.0000  s0.loss_mask: 14990625218487374633565683712.0000  s1.loss_cls: 728735163278934893255727251456.0000  s1.acc: 0.0000  s1.loss_bbox: 435739521958868115606965583872.0000  s1.loss_mask: 0.2851  s2.loss_cls: 110108315175134996165182881792.0000  s2.acc: 0.0000  s2.loss_bbox: 139955277895948622650606092288.0000  s2.loss_mask: 278968828209061553047076864.0000
+12/03 09:15:22 - mmengine - INFO - Epoch(train)   [2][750/787]  lr: 1.0000e-02  eta: 10:30:15  time: 0.4696  data_time: 0.0133  memory: 5905  loss: 1611036351706768727460913610752.0000  loss_rpn_cls: 2389668550156534335131353088.0000  loss_rpn_bbox: 1727904611466776136141242368.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 227341984729416753731019472896.0000  s0.loss_mask: 14455277542260723738606567424.0000  s1.loss_cls: 703111034547749013227497848832.0000  s1.acc: 0.0000  s1.loss_bbox: 420264509088955878954202300416.0000  s1.loss_mask: 0.2845  s2.loss_cls: 106330393465745727683693641728.0000  s2.acc: 0.0000  s2.loss_bbox: 135145653980839081113804603392.0000  s2.loss_mask: 269928558553882418248417280.0000
+12/03 09:15:39 - mmengine - INFO - Exp name: x101-64x4d_fpn_20e_coco_20241203_090132
+12/03 09:15:39 - mmengine - INFO - Saving checkpoint at 2 epochs
+12/03 09:16:04 - mmengine - INFO - Epoch(val)   [2][ 50/703]    eta: 0:00:50  time: 0.0770  data_time: 0.0056  memory: 5904  
+12/03 09:16:08 - mmengine - INFO - Epoch(val)   [2][100/703]    eta: 0:00:46  time: 0.0774  data_time: 0.0071  memory: 1748  
+12/03 09:16:12 - mmengine - INFO - Epoch(val)   [2][150/703]    eta: 0:00:42  time: 0.0776  data_time: 0.0069  memory: 1748  
+12/03 09:16:16 - mmengine - INFO - Epoch(val)   [2][200/703]    eta: 0:00:38  time: 0.0763  data_time: 0.0063  memory: 1748  
+12/03 09:16:20 - mmengine - INFO - Epoch(val)   [2][250/703]    eta: 0:00:34  time: 0.0779  data_time: 0.0067  memory: 1748  
+12/03 09:16:24 - mmengine - INFO - Epoch(val)   [2][300/703]    eta: 0:00:31  time: 0.0759  data_time: 0.0048  memory: 1748  
+12/03 09:16:28 - mmengine - INFO - Epoch(val)   [2][350/703]    eta: 0:00:27  time: 0.0757  data_time: 0.0041  memory: 1748  
+12/03 09:16:31 - mmengine - INFO - Epoch(val)   [2][400/703]    eta: 0:00:23  time: 0.0740  data_time: 0.0038  memory: 1748  
+12/03 09:16:35 - mmengine - INFO - Epoch(val)   [2][450/703]    eta: 0:00:19  time: 0.0751  data_time: 0.0044  memory: 1748  
+12/03 09:16:39 - mmengine - INFO - Epoch(val)   [2][500/703]    eta: 0:00:15  time: 0.0740  data_time: 0.0041  memory: 1748  
+12/03 09:16:43 - mmengine - INFO - Epoch(val)   [2][550/703]    eta: 0:00:11  time: 0.0783  data_time: 0.0062  memory: 1748  
+12/03 09:16:47 - mmengine - INFO - Epoch(val)   [2][600/703]    eta: 0:00:07  time: 0.0773  data_time: 0.0063  memory: 1748  
+12/03 09:16:50 - mmengine - INFO - Epoch(val)   [2][650/703]    eta: 0:00:04  time: 0.0774  data_time: 0.0060  memory: 1748  
+12/03 09:16:54 - mmengine - INFO - Epoch(val)   [2][700/703]    eta: 0:00:00  time: 0.0758  data_time: 0.0055  memory: 1748  
+12/03 09:16:54 - mmengine - INFO - Evaluating bbox...
+Loading and preparing results...
+12/03 09:16:54 - mmengine - ERROR - /home/lcy/playground/label_anything/mmdetection-3.3.0/mmdet/evaluation/metrics/coco_metric.py - compute_metrics - 465 - The testing results of the whole dataset is empty.
+12/03 09:16:54 - mmengine - INFO - Epoch(val) [2][703/703]    data_time: 0.0055  time: 0.0764
+12/03 09:17:18 - mmengine - INFO - Epoch(train)   [3][ 50/787]  lr: 1.0000e-02  eta: 10:28:07  time: 0.4731  data_time: 0.0152  memory: 5905  loss: 1616631591343388553448173600768.0000  loss_rpn_cls: 2390964367519433600851247104.0000  loss_rpn_bbox: 1816824624400331381877506048.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 227520010390034559727269052416.0000  s0.loss_mask: 14694362539670159392086425600.0000  s1.loss_cls: 705822595470432209810554355712.0000  s1.acc: 0.0000  s1.loss_bbox: 421966146226769954690635399168.0000  s1.loss_mask: 0.2855  s2.loss_cls: 106637724604214228870362038272.0000  s2.acc: 0.0000  s2.loss_bbox: 135503067232568380859481063424.0000  s2.loss_mask: 279888884103907436342018048.0000
+12/03 09:17:42 - mmengine - INFO - Epoch(train)   [3][100/787]  lr: 1.0000e-02  eta: 10:27:11  time: 0.4751  data_time: 0.0142  memory: 5904  loss: 1667758533099761872876959956992.0000  loss_rpn_cls: 2362224785925930874285588480.0000  loss_rpn_bbox: 1469799103931702861574963200.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 235039227701055924999953580032.0000  s0.loss_mask: 14845427891277529915922055168.0000  s1.loss_cls: 728130189597968808376046452736.0000  s1.acc: 0.0000  s1.loss_bbox: 436085667266379978193839849472.0000  s1.loss_mask: 0.2885  s2.loss_cls: 109861991817022032601191284736.0000  s2.acc: 0.0000  s2.loss_bbox: 139673730595134607087812739072.0000  s2.loss_mask: 290274268754250906778730496.0000
+12/03 09:18:06 - mmengine - INFO - Epoch(train)   [3][150/787]  lr: 1.0000e-02  eta: 10:26:14  time: 0.4739  data_time: 0.0130  memory: 5905  loss: 1541616751405971409607449378816.0000  loss_rpn_cls: 2291436630406877074224578560.0000  loss_rpn_bbox: 1612332179700895727824666624.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 217134070305275555033303220224.0000  s0.loss_mask: 14069594363042052754955567104.0000  s1.loss_cls: 673178802699879363263521095680.0000  s1.acc: 0.0000  s1.loss_bbox: 402193768901556064044084887552.0000  s1.loss_mask: 0.2837  s2.loss_cls: 101684569082224347336935473152.0000  s2.acc: 0.0000  s2.loss_bbox: 129195207571005632351754518528.0000  s2.loss_mask: 256967218725735289279479808.0000
+12/03 09:18:29 - mmengine - INFO - Epoch(train)   [3][200/787]  lr: 1.0000e-02  eta: 10:25:17  time: 0.4732  data_time: 0.0129  memory: 5905  loss: 1612786791668763540143829155840.0000  loss_rpn_cls: 2363417207074687896040505344.0000  loss_rpn_bbox: 1691407559344765864182284288.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 227504448870210883413289730048.0000  s0.loss_mask: 14336266469165197279920914432.0000  s1.loss_cls: 703878832402729821254080004096.0000  s1.acc: 0.0000  s1.loss_bbox: 421262959790007628412378677248.0000  s1.loss_mask: 0.2874  s2.loss_cls: 106306261889676263565473873920.0000  s2.acc: 0.0000  s2.loss_bbox: 135164638838573527735241539584.0000  s2.loss_mask: 278572475194000847308587008.0000
+12/03 09:18:54 - mmengine - INFO - Epoch(train)   [3][250/787]  lr: 1.0000e-02  eta: 10:25:03  time: 0.4926  data_time: 0.0132  memory: 5905  loss: 1540729602349449034725603672064.0000  loss_rpn_cls: 2264157971914431053300760576.0000  loss_rpn_bbox: 1559096479326230077172088832.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 217407795289352679667791822848.0000  s0.loss_mask: 13846844668816339535164080128.0000  s1.loss_cls: 672449982124480160363821662208.0000  s1.acc: 0.0000  s1.loss_bbox: 402422862611108967753369780224.0000  s1.loss_mask: 0.2868  s2.loss_cls: 101491075687981212003110748160.0000  s2.acc: 0.0000  s2.loss_bbox: 129029957139539264440291557376.0000  s2.loss_mask: 257836065167760464201908224.0000
+12/03 09:19:18 - mmengine - INFO - Epoch(train)   [3][300/787]  lr: 1.0000e-02  eta: 10:24:10  time: 0.4738  data_time: 0.0127  memory: 5904  loss: 1578299258574930106346014507008.0000  loss_rpn_cls: 2270799481572627610119176192.0000  loss_rpn_bbox: 1501234170255051016605007872.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 222592819761230098744041537536.0000  s0.loss_mask: 14113361090322461022671077376.0000  s1.loss_cls: 688894750707747609215087149056.0000  s1.acc: 0.0000  s1.loss_bbox: 412245863554544530650346553344.0000  s1.loss_mask: 0.2858  s2.loss_cls: 104088278556100031931932999680.0000  s2.acc: 0.0000  s2.loss_bbox: 132319790444173868288098435072.0000  s2.loss_mask: 272350265562623081894117376.0000
+12/03 09:19:41 - mmengine - INFO - Epoch(train)   [3][350/787]  lr: 1.0000e-02  eta: 10:23:20  time: 0.4746  data_time: 0.0129  memory: 5905  loss: 1517353732610045116865293844480.0000  loss_rpn_cls: 2186089405969797142907191296.0000  loss_rpn_bbox: 1574674701200919869802938368.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 213396748480591447910038634496.0000  s0.loss_mask: 14064011959175322362189971456.0000  s1.loss_cls: 662761505534990174031724937216.0000  s1.acc: 0.0000  s1.loss_bbox: 395800614423263689282492039168.0000  s1.loss_mask: 0.2849  s2.loss_cls: 100149756718414728852846673920.0000  s2.acc: 0.0000  s2.loss_bbox: 127169980470264553063546093568.0000  s2.loss_mask: 250356980910429860377133056.0000
+12/03 09:20:05 - mmengine - INFO - Epoch(train)   [3][400/787]  lr: 1.0000e-02  eta: 10:22:29  time: 0.4735  data_time: 0.0124  memory: 5905  loss: 1539668697407187953193054109696.0000  loss_rpn_cls: 2244138670947488952360108032.0000  loss_rpn_bbox: 1594629338951186429086007296.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 217324803098520107689806135296.0000  s0.loss_mask: 13800438115060173050168213504.0000  s1.loss_cls: 671881034432938506991054094336.0000  s1.acc: 0.0000  s1.loss_bbox: 401882034911920942468271439872.0000  s1.loss_mask: 0.2845  s2.loss_cls: 101577946169511513246486495232.0000  s2.acc: 0.0000  s2.loss_bbox: 129107684363980092087702913024.0000  s2.loss_mask: 256004628881806576958046208.0000
+12/03 09:20:17 - mmengine - INFO - Exp name: x101-64x4d_fpn_20e_coco_20241203_090132
+12/03 09:20:29 - mmengine - INFO - Epoch(train)   [3][450/787]  lr: 1.0000e-02  eta: 10:21:43  time: 0.4752  data_time: 0.0142  memory: 5905  loss: 1498757163714985279927688888320.0000  loss_rpn_cls: 2203715514904987940329357312.0000  loss_rpn_bbox: 1497978881444930840483069952.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 211742199381240686239031492608.0000  s0.loss_mask: 13267537580950864227282714624.0000  s1.loss_cls: 654016937824832033496875663360.0000  s1.acc: 0.0000  s1.loss_bbox: 390828320283286720409539444736.0000  s1.loss_mask: 0.2844  s2.loss_cls: 99048690410400152791321411584.0000  s2.acc: 0.0000  s2.loss_bbox: 125897987824060527554519367680.0000  s2.loss_mask: 253809812766888832211615744.0000
+12/03 09:20:52 - mmengine - INFO - Epoch(train)   [3][500/787]  lr: 1.0000e-02  eta: 10:20:51  time: 0.4719  data_time: 0.0131  memory: 5904  loss: 1531403466517771292751530295296.0000  loss_rpn_cls: 2184053782673691364636491776.0000  loss_rpn_bbox: 1465744032182564962487500800.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 215923659584744028401983029248.0000  s0.loss_mask: 13741645608627659364087365632.0000  s1.loss_cls: 668511953868539574340246568960.0000  s1.acc: 0.0000  s1.loss_bbox: 399729060808715842518895296512.0000  s1.loss_mask: 0.2852  s2.loss_cls: 101109416012229618526440128512.0000  s2.acc: 0.0000  s2.loss_bbox: 128478916567253395584587923456.0000  s2.loss_mask: 259007068908778128351952896.0000
+12/03 09:21:16 - mmengine - INFO - Epoch(train)   [3][550/787]  lr: 1.0000e-02  eta: 10:19:57  time: 0.4694  data_time: 0.0135  memory: 5905  loss: 1494036551685711541847566843904.0000  loss_rpn_cls: 2182217277960335960878088192.0000  loss_rpn_bbox: 1483291415579137530172276736.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 210744332553580881598539104256.0000  s0.loss_mask: 13395232755442732755266306048.0000  s1.loss_cls: 652082107207779373197211729920.0000  s1.acc: 0.0000  s1.loss_bbox: 390238469508745335060444479488.0000  s1.loss_mask: 0.2841  s2.loss_cls: 98477724757213108523130421248.0000  s2.acc: 0.0000  s2.loss_bbox: 125180095560281270200116969472.0000  s2.loss_mask: 253064359178516881794400256.0000
+12/03 09:21:39 - mmengine - INFO - Epoch(train)   [3][600/787]  lr: 1.0000e-02  eta: 10:19:02  time: 0.4683  data_time: 0.0124  memory: 5905  loss: 1508541795241853118155247845376.0000  loss_rpn_cls: 2171762566571947114895507456.0000  loss_rpn_bbox: 1412983305584071845418631168.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 212650183518685481995560026112.0000  s0.loss_mask: 13515765268765792805580701696.0000  s1.loss_cls: 658530173741323796009927573504.0000  s1.acc: 0.0000  s1.loss_bbox: 394126165649343495480620875776.0000  s1.loss_mask: 0.2854  s2.loss_cls: 99448968393799787621755387904.0000  s2.acc: 0.0000  s2.loss_bbox: 126425060403051901711263203328.0000  s2.loss_mask: 260735937239398516262961152.0000
+12/03 09:22:03 - mmengine - INFO - Epoch(train)   [3][650/787]  lr: 1.0000e-02  eta: 10:18:09  time: 0.4688  data_time: 0.0130  memory: 5904  loss: 1464141688490504699111033274368.0000  loss_rpn_cls: 2160064963743015577824788480.0000  loss_rpn_bbox: 1445245981390938109764435968.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 206291812102959338929627594752.0000  s0.loss_mask: 13019073302575141240931614720.0000  s1.loss_cls: 639073614308279468903366656000.0000  s1.acc: 0.0000  s1.loss_bbox: 382900564814308543334111510528.0000  s1.loss_mask: 0.2864  s2.loss_cls: 96391474292307094623978782720.0000  s2.acc: 0.0000  s2.loss_bbox: 122589697905606265661225435136.0000  s2.loss_mask: 270117190716029026923708416.0000
+12/03 09:22:26 - mmengine - INFO - Epoch(train)   [3][700/787]  lr: 1.0000e-02  eta: 10:17:22  time: 0.4714  data_time: 0.0149  memory: 5905  loss: 1519851921903459433252237869056.0000  loss_rpn_cls: 2118009459744650761183690752.0000  loss_rpn_bbox: 1649901216393214873804210176.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 214128670139612655425354203136.0000  s0.loss_mask: 13722264910328716651485200384.0000  s1.loss_cls: 663611816355052923090192302080.0000  s1.acc: 0.0000  s1.loss_bbox: 397120715327986036569530171392.0000  s1.loss_mask: 0.2850  s2.loss_cls: 100057723556950720531285409792.0000  s2.acc: 0.0000  s2.loss_bbox: 127185777352833734896955424768.0000  s2.loss_mask: 257049824352502014694916096.0000
+12/03 09:22:50 - mmengine - INFO - Epoch(train)   [3][750/787]  lr: 1.0000e-02  eta: 10:16:33  time: 0.4697  data_time: 0.0131  memory: 5905  loss: 1482409763528386879087439773696.0000  loss_rpn_cls: 2119899554463149942873522176.0000  loss_rpn_bbox: 1478578816278319834779877376.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 208750945536613877977159041024.0000  s0.loss_mask: 13475561236431054476928876544.0000  s1.loss_cls: 647448483435855814356371505152.0000  s1.acc: 0.0000  s1.loss_bbox: 386923010471286146952104771584.0000  s1.loss_mask: 0.2861  s2.loss_cls: 97767503599995962722055356416.0000  s2.acc: 0.0000  s2.loss_bbox: 124199066141421464594786811904.0000  s2.loss_mask: 246711950213857566278025216.0000
+12/03 09:23:07 - mmengine - INFO - Exp name: x101-64x4d_fpn_20e_coco_20241203_090132
+12/03 09:23:07 - mmengine - INFO - Saving checkpoint at 3 epochs
+12/03 09:23:27 - mmengine - INFO - Epoch(val)   [3][ 50/703]    eta: 0:00:52  time: 0.0800  data_time: 0.0073  memory: 5905  
+12/03 09:23:31 - mmengine - INFO - Epoch(val)   [3][100/703]    eta: 0:00:47  time: 0.0781  data_time: 0.0071  memory: 1748  
+12/03 09:23:35 - mmengine - INFO - Epoch(val)   [3][150/703]    eta: 0:00:43  time: 0.0756  data_time: 0.0053  memory: 1748  
+12/03 09:23:39 - mmengine - INFO - Epoch(val)   [3][200/703]    eta: 0:00:39  time: 0.0778  data_time: 0.0062  memory: 1748  
+12/03 09:23:43 - mmengine - INFO - Epoch(val)   [3][250/703]    eta: 0:00:35  time: 0.0781  data_time: 0.0067  memory: 1748  
+12/03 09:23:47 - mmengine - INFO - Epoch(val)   [3][300/703]    eta: 0:00:31  time: 0.0775  data_time: 0.0068  memory: 1748  
+12/03 09:23:51 - mmengine - INFO - Epoch(val)   [3][350/703]    eta: 0:00:27  time: 0.0762  data_time: 0.0054  memory: 1748  
+12/03 09:23:54 - mmengine - INFO - Epoch(val)   [3][400/703]    eta: 0:00:23  time: 0.0755  data_time: 0.0049  memory: 1748  
+12/03 09:23:58 - mmengine - INFO - Epoch(val)   [3][450/703]    eta: 0:00:19  time: 0.0780  data_time: 0.0064  memory: 1748  
+12/03 09:24:02 - mmengine - INFO - Epoch(val)   [3][500/703]    eta: 0:00:15  time: 0.0782  data_time: 0.0070  memory: 1748  
+12/03 09:24:06 - mmengine - INFO - Epoch(val)   [3][550/703]    eta: 0:00:11  time: 0.0737  data_time: 0.0037  memory: 1748  
+12/03 09:24:10 - mmengine - INFO - Epoch(val)   [3][600/703]    eta: 0:00:07  time: 0.0726  data_time: 0.0034  memory: 1748  
+12/03 09:24:13 - mmengine - INFO - Epoch(val)   [3][650/703]    eta: 0:00:04  time: 0.0733  data_time: 0.0035  memory: 1748  
+12/03 09:24:17 - mmengine - INFO - Epoch(val)   [3][700/703]    eta: 0:00:00  time: 0.0779  data_time: 0.0068  memory: 1748  
+12/03 09:24:17 - mmengine - INFO - Evaluating bbox...
+Loading and preparing results...
+12/03 09:24:17 - mmengine - ERROR - /home/lcy/playground/label_anything/mmdetection-3.3.0/mmdet/evaluation/metrics/coco_metric.py - compute_metrics - 465 - The testing results of the whole dataset is empty.
+12/03 09:24:17 - mmengine - INFO - Epoch(val) [3][703/703]    data_time: 0.0057  time: 0.0766
+12/03 09:24:41 - mmengine - INFO - Epoch(train)   [4][ 50/787]  lr: 1.0000e-02  eta: 10:15:18  time: 0.4798  data_time: 0.0153  memory: 5903  loss: 1374469457149075924542109515776.0000  loss_rpn_cls: 2054718651312962881605074944.0000  loss_rpn_bbox: 1423578257237476104986427392.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 193883475126139787382783737856.0000  s0.loss_mask: 12347164810886762560120422400.0000  s1.loss_cls: 599933987322734662434603139072.0000  s1.acc: 0.0000  s1.loss_bbox: 358640224544651207590981664768.0000  s1.loss_mask: 0.2843  s2.loss_cls: 90693926096993367212871909376.0000  s2.acc: 0.0000  s2.loss_bbox: 115260877910914514207572492288.0000  s2.loss_mask: 231477648697808164992581632.0000
+12/03 09:25:05 - mmengine - INFO - Epoch(train)   [4][100/787]  lr: 1.0000e-02  eta: 10:14:38  time: 0.4739  data_time: 0.0142  memory: 5905  loss: 1471728801153397008121427132416.0000  loss_rpn_cls: 2112631094576250610507579392.0000  loss_rpn_bbox: 1399465718945777208912773120.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 207505707741060533082082246656.0000  s0.loss_mask: 13190431477567624707584294912.0000  s1.loss_cls: 642612908605765575416901271552.0000  s1.acc: 0.0000  s1.loss_bbox: 383860522183895801481150857216.0000  s1.loss_mask: 0.2860  s2.loss_cls: 97255570361264685777697112064.0000  s2.acc: 0.0000  s2.loss_bbox: 123551076329715557386151788544.0000  s2.loss_mask: 240499622134345234458345472.0000
+12/03 09:25:29 - mmengine - INFO - Epoch(train)   [4][150/787]  lr: 1.0000e-02  eta: 10:14:00  time: 0.4746  data_time: 0.0128  memory: 5905  loss: 1449309471301403991526311198720.0000  loss_rpn_cls: 2028436789937721062358777856.0000  loss_rpn_bbox: 1565649091542190971468906496.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 204671838282049597874263556096.0000  s0.loss_mask: 12834110485593993138793349120.0000  s1.loss_cls: 632414513150191256275307724800.0000  s1.acc: 0.0000  s1.loss_bbox: 378376679016924599123424837632.0000  s1.loss_mask: 0.2864  s2.loss_cls: 95624227443047418459295055872.0000  s2.acc: 0.0000  s2.loss_bbox: 121555405765212121244505210880.0000  s2.loss_mask: 238609659125598887488782336.0000
+12/03 09:25:52 - mmengine - INFO - Epoch(train)   [4][200/787]  lr: 1.0000e-02  eta: 10:13:21  time: 0.4733  data_time: 0.0128  memory: 5904  loss: 1374250189739700561916836446208.0000  loss_rpn_cls: 2022821583332809685031976960.0000  loss_rpn_bbox: 1329682311828492988362784768.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 193547139684970120974679670784.0000  s0.loss_mask: 12455569389832181880176246784.0000  s1.loss_cls: 599974343533329335866632437760.0000  s1.acc: 0.0000  s1.loss_bbox: 358930923602814387025724047360.0000  s1.loss_mask: 0.2851  s2.loss_cls: 90613028181248620376207917056.0000  s2.acc: 0.0000  s2.loss_bbox: 115139128786120375727479062528.0000  s2.loss_mask: 237545802744131055427518464.0000
+12/03 09:26:16 - mmengine - INFO - Epoch(train)   [4][250/787]  lr: 1.0000e-02  eta: 10:12:39  time: 0.4714  data_time: 0.0128  memory: 5905  loss: 1353348510605034256723072778240.0000  loss_rpn_cls: 1975706246639751012850597888.0000  loss_rpn_bbox: 1206316590384332781754777600.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 190883938250702025763206463488.0000  s0.loss_mask: 12081856583233449625540100096.0000  s1.loss_cls: 590781327812699686416999776256.0000  s1.acc: 0.0000  s1.loss_bbox: 353531919071970558677262270464.0000  s1.loss_mask: 0.2867  s2.loss_cls: 89236734421036711577999376384.0000  s2.acc: 0.0000  s2.loss_bbox: 113425445363645190034316853248.0000  s2.loss_mask: 225272851317096454123683840.0000
+12/03 09:26:40 - mmengine - INFO - Epoch(train)   [4][300/787]  lr: 1.0000e-02  eta: 10:12:06  time: 0.4763  data_time: 0.0141  memory: 5904  loss: 1382871183319313449208889999360.0000  loss_rpn_cls: 2004943497776529986780397568.0000  loss_rpn_bbox: 1298625835412467039017631744.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 194764459416560740989608656896.0000  s0.loss_mask: 12324119674256274634768908288.0000  s1.loss_cls: 603566836611507589766499532800.0000  s1.acc: 0.0000  s1.loss_bbox: 361621432593506331284484390912.0000  s1.loss_mask: 0.2864  s2.loss_cls: 91135838635594567177671278592.0000  s2.acc: 0.0000  s2.loss_bbox: 115899305024939920338794315776.0000  s2.loss_mask: 255637610985976524447940608.0000
+12/03 09:27:03 - mmengine - INFO - Epoch(train)   [4][350/787]  lr: 1.0000e-02  eta: 10:11:25  time: 0.4712  data_time: 0.0133  memory: 5904  loss: 1398304671854057812608933691392.0000  loss_rpn_cls: 2013217384905381031071186944.0000  loss_rpn_bbox: 1338559322633531431000735744.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 197178845783264848482739945472.0000  s0.loss_mask: 12456947340954134533166333952.0000  s1.loss_cls: 610272224516914269361587355648.0000  s1.acc: 0.0000  s1.loss_bbox: 365606727582257889680614752256.0000  s1.loss_mask: 0.2858  s2.loss_cls: 92091473623140068812195364864.0000  s2.acc: 0.0000  s2.loss_bbox: 117102332042133462456459067392.0000  s2.loss_mask: 244345581961598504016019456.0000
+12/03 09:27:27 - mmengine - INFO - Epoch(train)   [4][400/787]  lr: 1.0000e-02  eta: 10:10:43  time: 0.4696  data_time: 0.0126  memory: 5905  loss: 1375742773380157721608238137344.0000  loss_rpn_cls: 1945260603901065938306334720.0000  loss_rpn_bbox: 1360112083726446817152335872.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 193829088386935198049502232576.0000  s0.loss_mask: 12255531503998763407750725632.0000  s1.loss_cls: 600520440260144242751078137856.0000  s1.acc: 0.0000  s1.loss_bbox: 359625741250590377553273290752.0000  s1.loss_mask: 0.2870  s2.loss_cls: 90675035214351940252686352384.0000  s2.acc: 0.0000  s2.loss_bbox: 115284316904715582367751733248.0000  s2.loss_mask: 247228422892303067119616000.0000
+12/03 09:27:50 - mmengine - INFO - Epoch(train)   [4][450/787]  lr: 1.0000e-02  eta: 10:09:58  time: 0.4676  data_time: 0.0125  memory: 5904  loss: 1315124248249063041172695416832.0000  loss_rpn_cls: 1961882351078242820223401984.0000  loss_rpn_bbox: 1378844126619739853605044224.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 185027193225516331594147692544.0000  s0.loss_mask: 11921563184446405229416546304.0000  s1.loss_cls: 574222461566155623605370617856.0000  s1.acc: 0.0000  s1.loss_bbox: 343535983556774998262526509056.0000  s1.loss_mask: 0.2863  s2.loss_cls: 86685319240546485543846805504.0000  s2.acc: 0.0000  s2.loss_bbox: 110158500708221744940360663040.0000  s2.loss_mask: 232513689787289587750535168.0000
+12/03 09:28:14 - mmengine - INFO - Epoch(train)   [4][500/787]  lr: 1.0000e-02  eta: 10:09:19  time: 0.4708  data_time: 0.0129  memory: 5904  loss: 1307090402739206026682641154048.0000  loss_rpn_cls: 1961058929743499051992612864.0000  loss_rpn_bbox: 1283342183321997263184592896.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 184092098548777381666802892800.0000  s0.loss_mask: 11840548201236550077349101568.0000  s1.loss_cls: 570616722438887610627712352256.0000  s1.acc: 0.0000  s1.loss_bbox: 341411601304782432811274469376.0000  s1.loss_mask: 0.2859  s2.loss_cls: 86154985678604017212235710464.0000  s2.acc: 0.0000  s2.loss_bbox: 109502142957555537858923593728.0000  s2.loss_mask: 227900275493409909259632640.0000
+12/03 09:28:37 - mmengine - INFO - Epoch(train)   [4][550/787]  lr: 1.0000e-02  eta: 10:08:40  time: 0.4709  data_time: 0.0130  memory: 5905  loss: 1274437251371651851948528762880.0000  loss_rpn_cls: 1882049388004967752814034944.0000  loss_rpn_bbox: 1307209987922200645620203520.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 179805669960882123215363637248.0000  s0.loss_mask: 11406642187082820786891784192.0000  s1.loss_cls: 556275236196377885098817617920.0000  s1.acc: 0.0000  s1.loss_bbox: 332708852983250034927826108416.0000  s1.loss_mask: 0.2856  s2.loss_cls: 84030977626931546611108544512.0000  s2.acc: 0.0000  s2.loss_bbox: 106806486870739248325872058368.0000  s2.loss_mask: 214126125451112643330834432.0000
+12/03 09:29:01 - mmengine - INFO - Epoch(train)   [4][600/787]  lr: 1.0000e-02  eta: 10:08:03  time: 0.4710  data_time: 0.0135  memory: 5904  loss: 1349295503681126282794100588544.0000  loss_rpn_cls: 1885885543387745708306071552.0000  loss_rpn_bbox: 1314357125786936567071244288.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 190418235090891421350134546432.0000  s0.loss_mask: 11996251861203398245346181120.0000  s1.loss_cls: 588986144750542515784917188608.0000  s1.acc: 0.0000  s1.loss_bbox: 352350515204218093794861514752.0000  s1.loss_mask: 0.2863  s2.loss_cls: 89001523641283905798356860928.0000  s2.acc: 0.0000  s2.loss_bbox: 113120772917506544457903767552.0000  s2.loss_mask: 221815261860873394750226432.0000
+12/03 09:29:19 - mmengine - INFO - Exp name: x101-64x4d_fpn_20e_coco_20241203_090132
+12/03 09:29:24 - mmengine - INFO - Epoch(train)   [4][650/787]  lr: 1.0000e-02  eta: 10:07:26  time: 0.4714  data_time: 0.0154  memory: 5905  loss: 1274096913063756678283978080256.0000  loss_rpn_cls: 1851248821055867274150281216.0000  loss_rpn_bbox: 1381927091849681681619353600.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 179444488071804838400145489920.0000  s0.loss_mask: 11584889043346692489728753664.0000  s1.loss_cls: 556280755698323049066394550272.0000  s1.acc: 0.0000  s1.loss_bbox: 332414923826412572655757557760.0000  s1.loss_mask: 0.2845  s2.loss_cls: 84089492658915439477612609536.0000  s2.acc: 0.0000  s2.loss_bbox: 106834246357635504479768936448.0000  s2.loss_mask: 214919516593308963375677440.0000
+12/03 09:29:48 - mmengine - INFO - Epoch(train)   [4][700/787]  lr: 1.0000e-02  eta: 10:06:48  time: 0.4705  data_time: 0.0145  memory: 5905  loss: 1259822714876788262788287954944.0000  loss_rpn_cls: 1852951086598989191573405696.0000  loss_rpn_bbox: 1347527589481502514790531072.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 177665325921282768086256058368.0000  s0.loss_mask: 11298375217896712904023998464.0000  s1.loss_cls: 549874390305347536518171852800.0000  s1.acc: 0.0000  s1.loss_bbox: 328857177165236653234728206336.0000  s1.loss_mask: 0.2848  s2.loss_cls: 83103976519660252385490501632.0000  s2.acc: 0.0000  s2.loss_bbox: 105611600646678190606386200576.0000  s2.loss_mask: 211407299502588357865635840.0000
+12/03 09:30:12 - mmengine - INFO - Epoch(train)   [4][750/787]  lr: 1.0000e-02  eta: 10:06:10  time: 0.4700  data_time: 0.0149  memory: 5905  loss: 1239810372954377902509170622464.0000  loss_rpn_cls: 1854592554625123148137234432.0000  loss_rpn_bbox: 1299723822513222378948919296.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 174539805563920354979006644224.0000  s0.loss_mask: 11252762458528569416319238144.0000  s1.loss_cls: 541324301736212245747257573376.0000  s1.acc: 0.0000  s1.loss_bbox: 323716449813231172263583154176.0000  s1.loss_mask: 0.2846  s2.loss_cls: 81742022603062887450295664640.0000  s2.acc: 0.0000  s2.loss_bbox: 103866373893938676886841327616.0000  s2.loss_mask: 214345887416220854303850496.0000
+12/03 09:30:29 - mmengine - INFO - Exp name: x101-64x4d_fpn_20e_coco_20241203_090132
+12/03 09:30:29 - mmengine - INFO - Saving checkpoint at 4 epochs
+12/03 09:30:51 - mmengine - INFO - Epoch(val)   [4][ 50/703]    eta: 0:00:50  time: 0.0770  data_time: 0.0055  memory: 5904  
+12/03 09:30:55 - mmengine - INFO - Epoch(val)   [4][100/703]    eta: 0:00:45  time: 0.0742  data_time: 0.0044  memory: 1748  
+12/03 09:30:59 - mmengine - INFO - Epoch(val)   [4][150/703]    eta: 0:00:41  time: 0.0743  data_time: 0.0048  memory: 1748  
+12/03 09:31:02 - mmengine - INFO - Epoch(val)   [4][200/703]    eta: 0:00:37  time: 0.0745  data_time: 0.0048  memory: 1748  
+12/03 09:31:06 - mmengine - INFO - Epoch(val)   [4][250/703]    eta: 0:00:34  time: 0.0778  data_time: 0.0075  memory: 1748  
+12/03 09:31:10 - mmengine - INFO - Epoch(val)   [4][300/703]    eta: 0:00:30  time: 0.0788  data_time: 0.0064  memory: 1748  
+12/03 09:31:14 - mmengine - INFO - Epoch(val)   [4][350/703]    eta: 0:00:26  time: 0.0777  data_time: 0.0070  memory: 1748  
+12/03 09:31:18 - mmengine - INFO - Epoch(val)   [4][400/703]    eta: 0:00:23  time: 0.0770  data_time: 0.0057  memory: 1748  
+12/03 09:31:22 - mmengine - INFO - Epoch(val)   [4][450/703]    eta: 0:00:19  time: 0.0778  data_time: 0.0074  memory: 1748  
+12/03 09:31:26 - mmengine - INFO - Epoch(val)   [4][500/703]    eta: 0:00:15  time: 0.0752  data_time: 0.0045  memory: 1748  
+12/03 09:31:29 - mmengine - INFO - Epoch(val)   [4][550/703]    eta: 0:00:11  time: 0.0743  data_time: 0.0037  memory: 1748  
+12/03 09:31:33 - mmengine - INFO - Epoch(val)   [4][600/703]    eta: 0:00:07  time: 0.0771  data_time: 0.0052  memory: 1748  
+12/03 09:31:37 - mmengine - INFO - Epoch(val)   [4][650/703]    eta: 0:00:04  time: 0.0782  data_time: 0.0063  memory: 1748  
+12/03 09:31:41 - mmengine - INFO - Epoch(val)   [4][700/703]    eta: 0:00:00  time: 0.0765  data_time: 0.0057  memory: 1748  
+12/03 09:31:41 - mmengine - INFO - Evaluating bbox...
+Loading and preparing results...
+12/03 09:31:41 - mmengine - ERROR - /home/lcy/playground/label_anything/mmdetection-3.3.0/mmdet/evaluation/metrics/coco_metric.py - compute_metrics - 465 - The testing results of the whole dataset is empty.
+12/03 09:31:41 - mmengine - INFO - Epoch(val) [4][703/703]    data_time: 0.0056  time: 0.0764
+12/03 09:32:05 - mmengine - INFO - Epoch(train)   [5][ 50/787]  lr: 1.0000e-02  eta: 10:05:02  time: 0.4709  data_time: 0.0138  memory: 5904  loss: 1257996041563766006251887001600.0000  loss_rpn_cls: 1832450856877952264317173760.0000  loss_rpn_bbox: 1247738576375234835792265216.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 177195726998018486492916088832.0000  s0.loss_mask: 11364284035471005966089060352.0000  s1.loss_cls: 549450740385750886758083461120.0000  s1.acc: 0.0000  s1.loss_bbox: 327982212192029392222856151040.0000  s1.loss_mask: 0.2852  s2.loss_cls: 83131758201678974508282675200.0000  s2.acc: 0.0000  s2.loss_bbox: 105583763901866277519843393536.0000  s2.loss_mask: 207365545011399517697736704.0000
+12/03 09:32:28 - mmengine - INFO - Epoch(train)   [5][100/787]  lr: 1.0000e-02  eta: 10:04:24  time: 0.4691  data_time: 0.0123  memory: 5905  loss: 1255997291260737083546544373760.0000  loss_rpn_cls: 1780284598005457497081511936.0000  loss_rpn_bbox: 1305520263951439473886101504.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 177128836943524569449142157312.0000  s0.loss_mask: 11245812469134315477786427392.0000  s1.loss_cls: 548228335043247526320581640192.0000  s1.acc: 0.0000  s1.loss_bbox: 327896521640988550750841864192.0000  s1.loss_mask: 0.2845  s2.loss_cls: 82865912108289190099324764160.0000  s2.acc: 0.0000  s2.loss_bbox: 105332620140942269788427649024.0000  s2.loss_mask: 213437664923230819072344064.0000
+12/03 09:32:52 - mmengine - INFO - Epoch(train)   [5][150/787]  lr: 1.0000e-02  eta: 10:03:47  time: 0.4685  data_time: 0.0136  memory: 5905  loss: 1214035735980964482631268827136.0000  loss_rpn_cls: 1792081777834638411223269376.0000  loss_rpn_bbox: 1228947000673727438548631552.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 171031304684901110865943592960.0000  s0.loss_mask: 10962891089538849229324156928.0000  s1.loss_cls: 529999598451535721782260531200.0000  s1.acc: 0.0000  s1.loss_bbox: 317040497362585459446045999104.0000  s1.loss_mask: 0.2841  s2.loss_cls: 80037646587136127642527334400.0000  s2.acc: 0.0000  s2.loss_bbox: 101733160911070472745370255360.0000  s2.loss_mask: 209616705414818283252613120.0000
+12/03 09:33:15 - mmengine - INFO - Epoch(train)   [5][200/787]  lr: 1.0000e-02  eta: 10:03:10  time: 0.4691  data_time: 0.0138  memory: 5905  loss: 1217373924712779103358444109824.0000  loss_rpn_cls: 1774869891275492370799394816.0000  loss_rpn_bbox: 1236045864147092208558800896.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 171664174706944127572901888000.0000  s0.loss_mask: 10833850642701089154451636224.0000  s1.loss_cls: 531321118332938791074796666880.0000  s1.acc: 0.0000  s1.loss_bbox: 318236451408155646167705714688.0000  s1.loss_mask: 0.2856  s2.loss_cls: 80157267058014422468596334592.0000  s2.acc: 0.0000  s2.loss_bbox: 101934537446130793442717990912.0000  s2.loss_mask: 215621470914480706171174912.0000
+12/03 09:33:39 - mmengine - INFO - Epoch(train)   [5][250/787]  lr: 1.0000e-02  eta: 10:02:36  time: 0.4712  data_time: 0.0149  memory: 5905  loss: 1214796068719009254765190184960.0000  loss_rpn_cls: 1760403116352838675040567296.0000  loss_rpn_bbox: 1297863655054438884570038272.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 171395262569891667477530673152.0000  s0.loss_mask: 10747314941536688293382455296.0000  s1.loss_cls: 530072845000210271645525344256.0000  s1.acc: 0.0000  s1.loss_bbox: 317441100244799154410879975424.0000  s1.loss_mask: 0.2862  s2.loss_cls: 80058874002265936883085213696.0000  s2.acc: 0.0000  s2.loss_bbox: 101808640383512764395804426240.0000  s2.loss_mask: 213776381455368092544663552.0000
+12/03 09:34:02 - mmengine - INFO - Epoch(train)   [5][300/787]  lr: 1.0000e-02  eta: 10:02:08  time: 0.4771  data_time: 0.0139  memory: 5904  loss: 1201254790877125652654401257472.0000  loss_rpn_cls: 1714592274371091926381232128.0000  loss_rpn_bbox: 1029209983449760133399183360.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 169262366835603763519264129024.0000  s0.loss_mask: 10841648851757078524108734464.0000  s1.loss_cls: 524607353327180740545677885440.0000  s1.acc: 0.0000  s1.loss_bbox: 313566002622398669833489088512.0000  s1.loss_mask: 0.2848  s2.loss_cls: 79295238063313724978667454464.0000  s2.acc: 0.0000  s2.loss_bbox: 100737556096955945072749182976.0000  s2.loss_mask: 200821626376985531429945344.0000
+12/03 09:34:26 - mmengine - INFO - Epoch(train)   [5][350/787]  lr: 1.0000e-02  eta: 10:01:36  time: 0.4723  data_time: 0.0146  memory: 5905  loss: 1158449690983987014603315871744.0000  loss_rpn_cls: 1710760454711040901650579456.0000  loss_rpn_bbox: 1224795735795072999689814016.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 163059512959575484071864696832.0000  s0.loss_mask: 10504167304047956707025879040.0000  s1.loss_cls: 505797930374218869621299085312.0000  s1.acc: 0.0000  s1.loss_bbox: 302418022380769335397679366144.0000  s1.loss_mask: 0.2852  s2.loss_cls: 76420413125401438421623242752.0000  s2.acc: 0.0000  s2.loss_bbox: 97110527313767827263425871872.0000  s2.loss_mask: 203562988159342344268677120.0000
+12/03 09:34:50 - mmengine - INFO - Epoch(train)   [5][400/787]  lr: 1.0000e-02  eta: 10:01:01  time: 0.4700  data_time: 0.0125  memory: 5904  loss: 1165149742237478741313989902336.0000  loss_rpn_cls: 1655065923993055855896428544.0000  loss_rpn_bbox: 1240444461125612647665893376.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 164087324313103165132657131520.0000  s0.loss_mask: 10474880662860725064174665728.0000  s1.loss_cls: 508714058168310945901111672832.0000  s1.acc: 0.0000  s1.loss_bbox: 304192998247851651725231390720.0000  s1.loss_mask: 0.2868  s2.loss_cls: 76884760304900131237832687616.0000  s2.acc: 0.0000  s2.loss_bbox: 97697522095507679486802919424.0000  s2.loss_mask: 202685009656663500048564224.0000
+12/03 09:35:13 - mmengine - INFO - Epoch(train)   [5][450/787]  lr: 1.0000e-02  eta: 10:00:32  time: 0.4751  data_time: 0.0147  memory: 5904  loss: 1168227179270417990969756483584.0000  loss_rpn_cls: 1740851229317412677098668032.0000  loss_rpn_bbox: 1285424101304900196889526272.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 164650689978567341123376775168.0000  s0.loss_mask: 10489750804619471218246942720.0000  s1.loss_cls: 509948923002542667389298802688.0000  s1.acc: 0.0000  s1.loss_bbox: 304825035622236407448970723328.0000  s1.loss_mask: 0.2873  s2.loss_cls: 77115707354402888598016753664.0000  s2.acc: 0.0000  s2.loss_bbox: 97974803021546422556323479552.0000  s2.loss_mask: 195976235421941826060288000.0000
+12/03 09:35:37 - mmengine - INFO - Epoch(train)   [5][500/787]  lr: 1.0000e-02  eta: 10:00:02  time: 0.4731  data_time: 0.0155  memory: 5905  loss: 1157406258042133930387412353024.0000  loss_rpn_cls: 1676236487733377937742757888.0000  loss_rpn_bbox: 1209784651319296725841084416.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 163319867412982328815091974144.0000  s0.loss_mask: 10314492368119206434960310272.0000  s1.loss_cls: 505144343519310123689077374976.0000  s1.acc: 0.0000  s1.loss_bbox: 302222883997385540363142299648.0000  s1.loss_mask: 0.2863  s2.loss_cls: 76317079718733233224387919872.0000  s2.acc: 0.0000  s2.loss_bbox: 97003782752894386710354329600.0000  s2.loss_mask: 197786844227031875536814080.0000
+12/03 09:36:00 - mmengine - INFO - Epoch(train)   [5][550/787]  lr: 1.0000e-02  eta: 9:59:28  time: 0.4705  data_time: 0.0140  memory: 5905  loss: 1156659377626146993223126482944.0000  loss_rpn_cls: 1665381328521679033168035840.0000  loss_rpn_bbox: 1087994492849783611636842496.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 163277651912256060760220762112.0000  s0.loss_mask: 10243263108152904670211211264.0000  s1.loss_cls: 504834683215244982349868302336.0000  s1.acc: 0.0000  s1.loss_bbox: 302193237358395394915813031936.0000  s1.loss_mask: 0.2866  s2.loss_cls: 76243264219344833911298457600.0000  s2.acc: 0.0000  s2.loss_bbox: 96925555807632357981897621504.0000  s2.loss_mask: 188346073437452160691339264.0000
+12/03 09:36:24 - mmengine - INFO - Epoch(train)   [5][600/787]  lr: 1.0000e-02  eta: 9:58:56  time: 0.4710  data_time: 0.0132  memory: 5905  loss: 1136347125386406686403843850240.0000  loss_rpn_cls: 1696055336049038660315643904.0000  loss_rpn_bbox: 1103229646605409170199937024.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 160191482279216780035892445184.0000  s0.loss_mask: 10234506931638116923343896576.0000  s1.loss_cls: 496112400541414193947815706624.0000  s1.acc: 0.0000  s1.loss_bbox: 296623770320198041354717102080.0000  s1.loss_mask: 0.2853  s2.loss_cls: 74954046410828886163104727040.0000  s2.acc: 0.0000  s2.loss_bbox: 95242770829054570785182580736.0000  s2.loss_mask: 188858850679657373924065280.0000
+12/03 09:36:48 - mmengine - INFO - Epoch(train)   [5][650/787]  lr: 1.0000e-02  eta: 9:58:24  time: 0.4715  data_time: 0.0131  memory: 5905  loss: 1141208151127314210327527161856.0000  loss_rpn_cls: 1646988755894486110964809728.0000  loss_rpn_bbox: 1192581568284292598485483520.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 160902888467079125886738366464.0000  s0.loss_mask: 10185472321904653764329996288.0000  s1.loss_cls: 498082901270353209881423511552.0000  s1.acc: 0.0000  s1.loss_bbox: 298407671271038326219061854208.0000  s1.loss_mask: 0.2862  s2.loss_cls: 75101993477594373051169898496.0000  s2.acc: 0.0000  s2.loss_bbox: 95490887364168421573541232640.0000  s2.loss_mask: 196770897544804831565185024.0000
+12/03 09:37:11 - mmengine - INFO - Epoch(train)   [5][700/787]  lr: 1.0000e-02  eta: 9:57:54  time: 0.4736  data_time: 0.0138  memory: 5903  loss: 1153256987377524519390337302528.0000  loss_rpn_cls: 1682318683256822388609777664.0000  loss_rpn_bbox: 1139507996712225585590435840.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 162630435718627396256425574400.0000  s0.loss_mask: 10270495484502340187520499712.0000  s1.loss_cls: 503241579659622699207026016256.0000  s1.acc: 0.0000  s1.loss_bbox: 301666062209604000867688644608.0000  s1.loss_mask: 0.2846  s2.loss_cls: 75896276819441770990193868800.0000  s2.acc: 0.0000  s2.loss_bbox: 96528227036548602791230177280.0000  s2.loss_mask: 202090158791790678794829824.0000
+12/03 09:37:35 - mmengine - INFO - Epoch(train)   [5][750/787]  lr: 1.0000e-02  eta: 9:57:24  time: 0.4723  data_time: 0.0133  memory: 5904  loss: 1099785432219231245185847394304.0000  loss_rpn_cls: 1606348645481325098969333760.0000  loss_rpn_bbox: 1031588020005515529048555520.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 154893523168480153765001822208.0000  s0.loss_mask: 9824862358632118571721818112.0000  s1.loss_cls: 480169724540706271702183575552.0000  s1.acc: 0.0000  s1.loss_bbox: 287382036589089902625787215872.0000  s1.loss_mask: 0.2869  s2.loss_cls: 72505755483395334455632592896.0000  s2.acc: 0.0000  s2.loss_bbox: 92175220448136606877923409920.0000  s2.loss_mask: 196364678473143745758887936.0000
+12/03 09:37:52 - mmengine - INFO - Exp name: x101-64x4d_fpn_20e_coco_20241203_090132
+12/03 09:37:52 - mmengine - INFO - Saving checkpoint at 5 epochs
+12/03 09:38:19 - mmengine - INFO - Epoch(val)   [5][ 50/703]    eta: 0:00:50  time: 0.0771  data_time: 0.0061  memory: 5905  
+12/03 09:38:23 - mmengine - INFO - Epoch(val)   [5][100/703]    eta: 0:00:46  time: 0.0782  data_time: 0.0071  memory: 1748  
+12/03 09:38:26 - mmengine - INFO - Epoch(val)   [5][150/703]    eta: 0:00:43  time: 0.0782  data_time: 0.0068  memory: 1748  
+12/03 09:38:30 - mmengine - INFO - Epoch(val)   [5][200/703]    eta: 0:00:38  time: 0.0748  data_time: 0.0041  memory: 1748  
+12/03 09:38:34 - mmengine - INFO - Epoch(val)   [5][250/703]    eta: 0:00:34  time: 0.0746  data_time: 0.0043  memory: 1748  
+12/03 09:38:38 - mmengine - INFO - Epoch(val)   [5][300/703]    eta: 0:00:30  time: 0.0746  data_time: 0.0040  memory: 1748  
+12/03 09:38:42 - mmengine - INFO - Epoch(val)   [5][350/703]    eta: 0:00:26  time: 0.0762  data_time: 0.0048  memory: 1748  
+12/03 09:38:45 - mmengine - INFO - Epoch(val)   [5][400/703]    eta: 0:00:23  time: 0.0780  data_time: 0.0062  memory: 1748  
+12/03 09:38:49 - mmengine - INFO - Epoch(val)   [5][450/703]    eta: 0:00:19  time: 0.0783  data_time: 0.0067  memory: 1748  
+12/03 09:38:53 - mmengine - INFO - Epoch(val)   [5][500/703]    eta: 0:00:15  time: 0.0778  data_time: 0.0059  memory: 1748  
+12/03 09:38:57 - mmengine - INFO - Epoch(val)   [5][550/703]    eta: 0:00:11  time: 0.0740  data_time: 0.0035  memory: 1748  
+12/03 09:39:01 - mmengine - INFO - Epoch(val)   [5][600/703]    eta: 0:00:07  time: 0.0731  data_time: 0.0036  memory: 1748  
+12/03 09:39:04 - mmengine - INFO - Epoch(val)   [5][650/703]    eta: 0:00:04  time: 0.0740  data_time: 0.0038  memory: 1748  
+12/03 09:39:08 - mmengine - INFO - Epoch(val)   [5][700/703]    eta: 0:00:00  time: 0.0729  data_time: 0.0035  memory: 1748  
+12/03 09:39:08 - mmengine - INFO - Evaluating bbox...
+Loading and preparing results...
+12/03 09:39:08 - mmengine - ERROR - /home/lcy/playground/label_anything/mmdetection-3.3.0/mmdet/evaluation/metrics/coco_metric.py - compute_metrics - 465 - The testing results of the whole dataset is empty.
+12/03 09:39:08 - mmengine - INFO - Epoch(val) [5][703/703]    data_time: 0.0050  time: 0.0758
+12/03 09:39:32 - mmengine - INFO - Epoch(train)   [6][ 50/787]  lr: 1.0000e-02  eta: 9:56:29  time: 0.4747  data_time: 0.0156  memory: 5904  loss: 1070086445229947631626331619328.0000  loss_rpn_cls: 1609674401591676454595198976.0000  loss_rpn_bbox: 1105714837346009758811815936.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 151022877982094394892402819072.0000  s0.loss_mask: 9491784948934502241538146304.0000  s1.loss_cls: 467031789309175049321097199616.0000  s1.acc: 0.0000  s1.loss_bbox: 279461150841081680051145015296.0000  s1.loss_mask: 0.2868  s2.loss_cls: 70531059309625563843202646016.0000  s2.acc: 0.0000  s2.loss_bbox: 89652903262098530310908018688.0000  s2.loss_mask: 179495757653632522729291776.0000
+12/03 09:39:39 - mmengine - INFO - Exp name: x101-64x4d_fpn_20e_coco_20241203_090132
+12/03 09:39:55 - mmengine - INFO - Epoch(train)   [6][100/787]  lr: 1.0000e-02  eta: 9:55:55  time: 0.4681  data_time: 0.0126  memory: 5905  loss: 1097707777594692054965695807488.0000  loss_rpn_cls: 1556647140201671685021106176.0000  loss_rpn_bbox: 1015785583859567905902428160.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 154703142191538557304881283072.0000  s0.loss_mask: 9875798511871322555638874112.0000  s1.loss_cls: 479272198744969171560225046528.0000  s1.acc: 0.0000  s1.loss_bbox: 286660254606486036609390084096.0000  s1.loss_mask: 0.2838  s2.loss_cls: 72405574492472763612403859456.0000  s2.acc: 0.0000  s2.loss_bbox: 92030579840711430477503791104.0000  s2.loss_mask: 187781057967509290910482432.0000
+12/03 09:40:19 - mmengine - INFO - Epoch(train)   [6][150/787]  lr: 1.0000e-02  eta: 9:55:24  time: 0.4707  data_time: 0.0137  memory: 5905  loss: 1076972391495564281641909092352.0000  loss_rpn_cls: 1546612117328531660587663360.0000  loss_rpn_bbox: 1161730953104910769002119168.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 151641625483828407286357819392.0000  s0.loss_mask: 9621604716107014482610356224.0000  s1.loss_cls: 470080458818868587654188892160.0000  s1.acc: 0.0000  s1.loss_bbox: 281630261081664090485555200000.0000  s1.loss_mask: 0.2857  s2.loss_cls: 70915384666809418484358840320.0000  s2.acc: 0.0000  s2.loss_bbox: 90173243068747970778763362304.0000  s2.loss_mask: 201477324011652920253612032.0000
+12/03 09:40:42 - mmengine - INFO - Epoch(train)   [6][200/787]  lr: 1.0000e-02  eta: 9:54:50  time: 0.4685  data_time: 0.0140  memory: 5904  loss: 1095087337944504929577905160192.0000  loss_rpn_cls: 1546731557782799828006207488.0000  loss_rpn_bbox: 1009755008966869549901152256.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 154602575902734641034893983744.0000  s0.loss_mask: 9740348827922305117153394688.0000  s1.loss_cls: 477958846668634845458552848384.0000  s1.acc: 0.0000  s1.loss_bbox: 286003981291732538311397343232.0000  s1.loss_mask: 0.2845  s2.loss_cls: 72230996017716452341571387392.0000  s2.acc: 0.0000  s2.loss_bbox: 91814369785844433354370318336.0000  s2.loss_mask: 179738310386576365239402496.0000
+12/03 09:41:06 - mmengine - INFO - Epoch(train)   [6][250/787]  lr: 1.0000e-02  eta: 9:54:20  time: 0.4718  data_time: 0.0149  memory: 5904  loss: 1099288562196212391853753892864.0000  loss_rpn_cls: 1552484993957622859455004672.0000  loss_rpn_bbox: 1109273642980160642811428864.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 155071247353221711658974445568.0000  s0.loss_mask: 9789498870001484360862138368.0000  s1.loss_cls: 479852184307033151943435354112.0000  s1.acc: 0.0000  s1.loss_bbox: 286888474867134264526971600896.0000  s1.loss_mask: 0.2851  s2.loss_cls: 72599749843659690855381336064.0000  s2.acc: 0.0000  s2.loss_bbox: 92248796712438974515005882368.0000  s2.loss_mask: 176847373548832751729246208.0000
+12/03 09:41:29 - mmengine - INFO - Epoch(train)   [6][300/787]  lr: 1.0000e-02  eta: 9:53:49  time: 0.4696  data_time: 0.0126  memory: 5904  loss: 1026297080246882403977225306112.0000  loss_rpn_cls: 1497657147354322793459089408.0000  loss_rpn_bbox: 972170333862794514395037696.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 144704934368038806266008567808.0000  s0.loss_mask: 9239539979370344505833160704.0000  s1.loss_cls: 448094266687420236030007050240.0000  s1.acc: 0.0000  s1.loss_bbox: 267841103200780108846176665600.0000  s1.loss_mask: 0.2854  s2.loss_cls: 67719105314540979668719239168.0000  s2.acc: 0.0000  s2.loss_bbox: 86060625996068557627576025088.0000  s2.loss_mask: 167674248229225487012986880.0000
+12/03 09:41:53 - mmengine - INFO - Epoch(train)   [6][350/787]  lr: 1.0000e-02  eta: 9:53:17  time: 0.4702  data_time: 0.0136  memory: 5904  loss: 1017922193740997508524417220608.0000  loss_rpn_cls: 1499805703093387314516197376.0000  loss_rpn_bbox: 906345460779952499203244032.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 143476967588975918904292409344.0000  s0.loss_mask: 9109854469076939940911120384.0000  s1.loss_cls: 444414600990704069591429021696.0000  s1.acc: 0.0000  s1.loss_bbox: 265795658137968606273333100544.0000  s1.loss_mask: 0.2854  s2.loss_cls: 67175413122291766166290432000.0000  s2.acc: 0.0000  s2.loss_bbox: 85372284223897839717090066432.0000  s2.loss_mask: 171253844450752027001094144.0000
+12/03 09:42:17 - mmengine - INFO - Epoch(train)   [6][400/787]  lr: 1.0000e-02  eta: 9:52:52  time: 0.4766  data_time: 0.0143  memory: 5905  loss: 1027928832405379112667141111808.0000  loss_rpn_cls: 1489689597187736495240249344.0000  loss_rpn_bbox: 1091383482554145346185854976.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 144633795883762219967678775296.0000  s0.loss_mask: 9364510265760184545977565184.0000  s1.loss_cls: 449022899655653309172666073088.0000  s1.acc: 0.0000  s1.loss_bbox: 267977571658559351779223404544.0000  s1.loss_mask: 0.2858  s2.loss_cls: 67926643971177462382901329920.0000  s2.acc: 0.0000  s2.loss_bbox: 86253146771710876907147886592.0000  s2.loss_mask: 169187359382876059422687232.0000
+12/03 09:42:40 - mmengine - INFO - Epoch(train)   [6][450/787]  lr: 1.0000e-02  eta: 9:52:22  time: 0.4716  data_time: 0.0137  memory: 5904  loss: 1022052744189290203877220548608.0000  loss_rpn_cls: 1479580058322976191442583552.0000  loss_rpn_bbox: 980913431636034550946070528.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 144103306200383816706597847040.0000  s0.loss_mask: 9114463061945320917256110080.0000  s1.loss_cls: 446211383612836382568983035904.0000  s1.acc: 0.0000  s1.loss_bbox: 266903992262447628672986775552.0000  s1.loss_mask: 0.2873  s2.loss_cls: 67413699484887540917967257600.0000  s2.acc: 0.0000  s2.loss_bbox: 85674806859918831456777928704.0000  s2.loss_mask: 170589229844466836722155520.0000
+12/03 09:43:04 - mmengine - INFO - Epoch(train)   [6][500/787]  lr: 1.0000e-02  eta: 9:51:56  time: 0.4751  data_time: 0.0162  memory: 5905  loss: 1016751385352475221647098380288.0000  loss_rpn_cls: 1482488010437453229716406272.0000  loss_rpn_bbox: 1096820536038816141239386112.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 143332985279438447495541161984.0000  s0.loss_mask: 9018843097854734500913741824.0000  s1.loss_cls: 443778217905787108053754052608.0000  s1.acc: 0.0000  s1.loss_bbox: 265710576961098674893840449536.0000  s1.loss_mask: 0.2867  s2.loss_cls: 66990126445417229109109456896.0000  s2.acc: 0.0000  s2.loss_bbox: 85165764181711708466943361024.0000  s2.loss_mask: 175570391233969789092233216.0000
+12/03 09:43:28 - mmengine - INFO - Epoch(train)   [6][550/787]  lr: 1.0000e-02  eta: 9:51:27  time: 0.4726  data_time: 0.0134  memory: 5905  loss: 981498615059662555357630169088.0000  loss_rpn_cls: 1459036319373497238894411776.0000  loss_rpn_bbox: 1045083219306267479646404608.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 138390504950225093026297937920.0000  s0.loss_mask: 8804024582719251920873062400.0000  s1.loss_cls: 428466428155410157447512326144.0000  s1.acc: 0.0000  s1.loss_bbox: 256113112085202448660608057344.0000  s1.loss_mask: 0.2836  s2.loss_cls: 64763442246043628904499904512.0000  s2.acc: 0.0000  s2.loss_bbox: 82293103221016550743839080448.0000  s2.loss_mask: 163879023220067866674987008.0000
+12/03 09:43:52 - mmengine - INFO - Epoch(train)   [6][600/787]  lr: 1.0000e-02  eta: 9:51:03  time: 0.4775  data_time: 0.0141  memory: 5905  loss: 1000499181273963748781067337728.0000  loss_rpn_cls: 1477058776527595252654014464.0000  loss_rpn_bbox: 1046398490605467044386177024.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 141305297070181155159345725440.0000  s0.loss_mask: 8852475531567266037539799040.0000  s1.loss_cls: 436577677785393338752719388672.0000  s1.acc: 0.0000  s1.loss_bbox: 261303630558246031245224968192.0000  s1.loss_mask: 0.2852  s2.loss_cls: 65932694000902058037269757952.0000  s2.acc: 0.0000  s2.loss_bbox: 83837103704397230085521801216.0000  s2.loss_mask: 166845762894298681001902080.0000
+12/03 09:44:15 - mmengine - INFO - Epoch(train)   [6][650/787]  lr: 1.0000e-02  eta: 9:50:33  time: 0.4715  data_time: 0.0130  memory: 5905  loss: 1004993469544968997536232636416.0000  loss_rpn_cls: 1476447455856210996847706112.0000  loss_rpn_bbox: 1110408795843005891316023296.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 141324231115252238362838302720.0000  s0.loss_mask: 9012314272715256655083732992.0000  s1.loss_cls: 438801343825900375995588804608.0000  s1.acc: 0.0000  s1.loss_bbox: 262753406513219978065120067584.0000  s1.loss_mask: 0.2882  s2.loss_cls: 66190678345794838907790032896.0000  s2.acc: 0.0000  s2.loss_bbox: 84138756858301390940320825344.0000  s2.loss_mask: 185894897939521182650859520.0000
+12/03 09:44:39 - mmengine - INFO - Epoch(train)   [6][700/787]  lr: 1.0000e-02  eta: 9:50:04  time: 0.4706  data_time: 0.0133  memory: 5903  loss: 1017993323913909112415981666304.0000  loss_rpn_cls: 1463124128190408000790331392.0000  loss_rpn_bbox: 980020641689136539893760000.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 143450185726388944313285345280.0000  s0.loss_mask: 9012397799572422411933450240.0000  s1.loss_cls: 444244537617765727186704138240.0000  s1.acc: 0.0000  s1.loss_bbox: 266403697201466074015113150464.0000  s1.loss_mask: 0.2865  s2.loss_cls: 67010611315641279667215794176.0000  s2.acc: 0.0000  s2.loss_bbox: 85241052020522133711424061440.0000  s2.loss_mask: 187696632569439687175831552.0000
+12/03 09:45:02 - mmengine - INFO - Epoch(train)   [6][750/787]  lr: 1.0000e-02  eta: 9:49:35  time: 0.4720  data_time: 0.0133  memory: 5905  loss: 969842245243110717506728230912.0000  loss_rpn_cls: 1430381188450103447567466496.0000  loss_rpn_bbox: 950608014036035018925539328.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 136658743269932844137249243136.0000  s0.loss_mask: 8640410982505431182748942336.0000  s1.loss_cls: 423359069422761943574769565696.0000  s1.acc: 0.0000  s1.loss_bbox: 253427612580875518447741566976.0000  s1.loss_mask: 0.2872  s2.loss_cls: 63935804829727722661331599360.0000  s2.acc: 0.0000  s2.loss_bbox: 81269593187776108374819602432.0000  s2.loss_mask: 170007566372464880684892160.0000
+12/03 09:45:20 - mmengine - INFO - Exp name: x101-64x4d_fpn_20e_coco_20241203_090132
+12/03 09:45:20 - mmengine - INFO - Saving checkpoint at 6 epochs
+12/03 09:45:45 - mmengine - INFO - Epoch(val)   [6][ 50/703]    eta: 0:00:48  time: 0.0747  data_time: 0.0045  memory: 5905  
+12/03 09:45:49 - mmengine - INFO - Epoch(val)   [6][100/703]    eta: 0:00:44  time: 0.0739  data_time: 0.0043  memory: 1748  
+12/03 09:45:53 - mmengine - INFO - Epoch(val)   [6][150/703]    eta: 0:00:41  time: 0.0739  data_time: 0.0040  memory: 1748  
+12/03 09:45:56 - mmengine - INFO - Epoch(val)   [6][200/703]    eta: 0:00:37  time: 0.0731  data_time: 0.0038  memory: 1748  
+12/03 09:46:00 - mmengine - INFO - Epoch(val)   [6][250/703]    eta: 0:00:33  time: 0.0741  data_time: 0.0039  memory: 1748  
+12/03 09:46:04 - mmengine - INFO - Epoch(val)   [6][300/703]    eta: 0:00:29  time: 0.0750  data_time: 0.0041  memory: 1748  
+12/03 09:46:08 - mmengine - INFO - Epoch(val)   [6][350/703]    eta: 0:00:26  time: 0.0752  data_time: 0.0043  memory: 1748  
+12/03 09:46:11 - mmengine - INFO - Epoch(val)   [6][400/703]    eta: 0:00:22  time: 0.0737  data_time: 0.0036  memory: 1748  
+12/03 09:46:15 - mmengine - INFO - Epoch(val)   [6][450/703]    eta: 0:00:18  time: 0.0738  data_time: 0.0040  memory: 1748  
+12/03 09:46:19 - mmengine - INFO - Epoch(val)   [6][500/703]    eta: 0:00:15  time: 0.0737  data_time: 0.0037  memory: 1748  
+12/03 09:46:22 - mmengine - INFO - Epoch(val)   [6][550/703]    eta: 0:00:11  time: 0.0737  data_time: 0.0037  memory: 1748  
+12/03 09:46:26 - mmengine - INFO - Epoch(val)   [6][600/703]    eta: 0:00:07  time: 0.0736  data_time: 0.0038  memory: 1748  
+12/03 09:46:30 - mmengine - INFO - Epoch(val)   [6][650/703]    eta: 0:00:03  time: 0.0739  data_time: 0.0040  memory: 1748  
+12/03 09:46:34 - mmengine - INFO - Epoch(val)   [6][700/703]    eta: 0:00:00  time: 0.0731  data_time: 0.0036  memory: 1748  
+12/03 09:46:34 - mmengine - INFO - Evaluating bbox...
+Loading and preparing results...
+12/03 09:46:34 - mmengine - ERROR - /home/lcy/playground/label_anything/mmdetection-3.3.0/mmdet/evaluation/metrics/coco_metric.py - compute_metrics - 465 - The testing results of the whole dataset is empty.
+12/03 09:46:34 - mmengine - INFO - Epoch(val) [6][703/703]    data_time: 0.0039  time: 0.0740
+12/03 09:46:57 - mmengine - INFO - Epoch(train)   [7][ 50/787]  lr: 1.0000e-02  eta: 9:48:40  time: 0.4695  data_time: 0.0135  memory: 5903  loss: 969906375735526707659374854144.0000  loss_rpn_cls: 1383958587502333427684737024.0000  loss_rpn_bbox: 944987838247204878802747392.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 136640470733958690461594943488.0000  s0.loss_mask: 8639134585874692113713594368.0000  s1.loss_cls: 423411674696434560495838560256.0000  s1.acc: 0.0000  s1.loss_bbox: 253629666019947510568532836352.0000  s1.loss_mask: 0.2872  s2.loss_cls: 63876281666947055875811966976.0000  s2.acc: 0.0000  s2.loss_bbox: 81211353847547480512391020544.0000  s2.loss_mask: 168851654466176221288857600.0000
+12/03 09:47:21 - mmengine - INFO - Epoch(train)   [7][100/787]  lr: 1.0000e-02  eta: 9:48:12  time: 0.4721  data_time: 0.0145  memory: 5905  loss: 945810185680392611523261890560.0000  loss_rpn_cls: 1367444587019421199363997696.0000  loss_rpn_bbox: 897962453043338114462908416.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 133600704774032000297272868864.0000  s0.loss_mask: 8238691319648157945208766464.0000  s1.loss_cls: 412658242885398501585632362496.0000  s1.acc: 0.0000  s1.loss_bbox: 247371324148850822512839229440.0000  s1.loss_mask: 0.2861  s2.loss_cls: 62287130259834349670918782976.0000  s2.acc: 0.0000  s2.loss_bbox: 79225374617987513484545359872.0000  s2.loss_mask: 163308299405171366857539584.0000
+12/03 09:47:44 - mmengine - INFO - Epoch(train)   [7][150/787]  lr: 1.0000e-02  eta: 9:47:44  time: 0.4719  data_time: 0.0157  memory: 5905  loss: 938637775374874605497020841984.0000  loss_rpn_cls: 1345473350469147377759420416.0000  loss_rpn_bbox: 942345511130821772181504000.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 132375552525392920836290117632.0000  s0.loss_mask: 8409829562227615722306011136.0000  s1.loss_cls: 409737436170595212135090880512.0000  s1.acc: 0.0000  s1.loss_bbox: 244934422861019013384329232384.0000  s1.loss_mask: 0.2849  s2.loss_cls: 61981806788252360907780259840.0000  s2.acc: 0.0000  s2.loss_bbox: 78757609956312490174769528832.0000  s2.loss_mask: 153312989051608231577649152.0000
+12/03 09:48:08 - mmengine - INFO - Epoch(train)   [7][200/787]  lr: 1.0000e-02  eta: 9:47:15  time: 0.4713  data_time: 0.0146  memory: 5905  loss: 924003284048200889773974355968.0000  loss_rpn_cls: 1328564439137626189534855168.0000  loss_rpn_bbox: 977900256341881812689092608.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 130171931041659043941997084672.0000  s0.loss_mask: 8366546299021807177810575360.0000  s1.loss_cls: 403435199336356285449152495616.0000  s1.acc: 0.0000  s1.loss_bbox: 241313130903081599092593262592.0000  s1.loss_mask: 0.2851  s2.loss_cls: 60884644649503833552270131200.0000  s2.acc: 0.0000  s2.loss_bbox: 77373453361459275870949605376.0000  s2.loss_mask: 151918247518732162204434432.0000
+12/03 09:48:32 - mmengine - INFO - Epoch(train)   [7][250/787]  lr: 1.0000e-02  eta: 9:46:48  time: 0.4733  data_time: 0.0132  memory: 5905  loss: 898189519435057033311187632128.0000  loss_rpn_cls: 1366126136239413101041025024.0000  loss_rpn_bbox: 891500680342828572502654976.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 126609843392317383984491266048.0000  s0.loss_mask: 8025380998502225914816888832.0000  s1.loss_cls: 392076942315556351821911949312.0000  s1.acc: 0.0000  s1.loss_bbox: 234531072166616288679105134592.0000  s1.loss_mask: 0.2839  s2.loss_cls: 59243320915277693692378349568.0000  s2.acc: 0.0000  s2.loss_bbox: 75292534259417757912490049536.0000  s2.loss_mask: 152786854522019269310414848.0000
+12/03 09:48:45 - mmengine - INFO - Exp name: x101-64x4d_fpn_20e_coco_20241203_090132
+12/03 09:48:55 - mmengine - INFO - Epoch(train)   [7][300/787]  lr: 1.0000e-02  eta: 9:46:21  time: 0.4735  data_time: 0.0126  memory: 5904  loss: 956690666905915864812330418176.0000  loss_rpn_cls: 1377311995397209759376474112.0000  loss_rpn_bbox: 932161687227676365141573632.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 134794153698630334626291253248.0000  s0.loss_mask: 8599031163557872114501419008.0000  s1.loss_cls: 417765920472231619113571581952.0000  s1.acc: 0.0000  s1.loss_bbox: 249852806654122197480183431168.0000  s1.loss_mask: 0.2851  s2.loss_cls: 63065921500645374757403885568.0000  s2.acc: 0.0000  s2.loss_bbox: 80145339682541314577786732544.0000  s2.loss_mask: 158024431188169985944977408.0000
+12/03 09:49:19 - mmengine - INFO - Epoch(train)   [7][350/787]  lr: 1.0000e-02  eta: 9:45:53  time: 0.4720  data_time: 0.0132  memory: 5905  loss: 905037695080175690979634839552.0000  loss_rpn_cls: 1344170936550567188577124352.0000  loss_rpn_bbox: 1011136420698010595729866752.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 127801222787028273260753059840.0000  s0.loss_mask: 7969298575552816876257017856.0000  s1.loss_cls: 394853415376755904175530835968.0000  s1.acc: 0.0000  s1.loss_bbox: 236335675027644198604760940544.0000  s1.loss_mask: 0.2851  s2.loss_cls: 59674779267853768410827587584.0000  s2.acc: 0.0000  s2.loss_bbox: 75890993058031422727369261056.0000  s2.loss_mask: 156995147325510213353603072.0000
+12/03 09:49:43 - mmengine - INFO - Epoch(train)   [7][400/787]  lr: 1.0000e-02  eta: 9:45:25  time: 0.4712  data_time: 0.0134  memory: 5904  loss: 933902579922323004844345917440.0000  loss_rpn_cls: 1361067830935128768553943040.0000  loss_rpn_bbox: 792679482674150725178621952.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 131824948960901372515429908480.0000  s0.loss_mask: 8267885744823894955238883328.0000  s1.loss_cls: 407729792329216425054810669056.0000  s1.acc: 0.0000  s1.loss_bbox: 243748926023788486168156307456.0000  s1.loss_mask: 0.2875  s2.loss_cls: 61655564272071897810353520640.0000  s2.acc: 0.0000  s2.loss_bbox: 78368874381070290608822681600.0000  s2.loss_mask: 152839716249706648165154816.0000
+12/03 09:50:06 - mmengine - INFO - Epoch(train)   [7][450/787]  lr: 1.0000e-02  eta: 9:44:59  time: 0.4737  data_time: 0.0149  memory: 5905  loss: 905974849086490411888870948864.0000  loss_rpn_cls: 1289890086084196469286371328.0000  loss_rpn_bbox: 951350123229706426416889856.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 127947962769697067857461903360.0000  s0.loss_mask: 7978747369753731918364409856.0000  s1.loss_cls: 395368088343625865884757655552.0000  s1.acc: 0.0000  s1.loss_bbox: 236612712846256401433883574272.0000  s1.loss_mask: 0.2839  s2.loss_cls: 59731885617915826539820220416.0000  s2.acc: 0.0000  s2.loss_bbox: 75945596081620904620559695872.0000  s2.loss_mask: 148617980381471988286226432.0000
+12/03 09:50:31 - mmengine - INFO - Epoch(train)   [7][500/787]  lr: 1.0000e-02  eta: 9:44:43  time: 0.4898  data_time: 0.0134  memory: 5905  loss: 899162959349847504203601149952.0000  loss_rpn_cls: 1290617109161629510134661120.0000  loss_rpn_bbox: 982508894589253364291207168.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 126948199911894373462230171648.0000  s0.loss_mask: 7945985444624426098539626496.0000  s1.loss_cls: 392394206763026914214626197504.0000  s1.acc: 0.0000  s1.loss_bbox: 234831602247323492067504553984.0000  s1.loss_mask: 0.2853  s2.loss_cls: 59264538744003554670242955264.0000  s2.acc: 0.0000  s2.loss_bbox: 75354494446645568073931685888.0000  s2.loss_mask: 150812060471301167969730560.0000
+12/03 09:50:55 - mmengine - INFO - Epoch(train)   [7][550/787]  lr: 1.0000e-02  eta: 9:44:24  time: 0.4844  data_time: 0.0139  memory: 5904  loss: 881627376999541719153002938368.0000  loss_rpn_cls: 1287060799740886686009131008.0000  loss_rpn_bbox: 877543278684696146362761216.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 124359158048636590243167862784.0000  s0.loss_mask: 7739233540146945679677194240.0000  s1.loss_cls: 384717990978178650365795237888.0000  s1.acc: 0.0000  s1.loss_bbox: 230635969088637092358927679488.0000  s1.loss_mask: 0.2869  s2.loss_cls: 58039388148192733658324402176.0000  s2.acc: 0.0000  s2.loss_bbox: 73814566059883061949660921856.0000  s2.loss_mask: 156463114265036228663443456.0000
+12/03 09:51:18 - mmengine - INFO - Epoch(train)   [7][600/787]  lr: 1.0000e-02  eta: 9:43:55  time: 0.4695  data_time: 0.0140  memory: 5905  loss: 859061892549429128704523501568.0000  loss_rpn_cls: 1281705732072381471724142592.0000  loss_rpn_bbox: 917255027556492121697419264.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 121252761197688557995389091840.0000  s0.loss_mask: 7627359904880251906797076480.0000  s1.loss_cls: 374867713268148722212741840896.0000  s1.acc: 0.0000  s1.loss_bbox: 224344997365195741257502031872.0000  s1.loss_mask: 0.2851  s2.loss_cls: 56631559557976169517531791360.0000  s2.acc: 0.0000  s2.loss_bbox: 71996237546225381446046973952.0000  s2.loss_mask: 142306425974315047771439104.0000
+12/03 09:51:42 - mmengine - INFO - Epoch(train)   [7][650/787]  lr: 1.0000e-02  eta: 9:43:25  time: 0.4692  data_time: 0.0128  memory: 5903  loss: 854445272319158382069031108608.0000  loss_rpn_cls: 1280473617957596580626300928.0000  loss_rpn_bbox: 794440166842144841384591360.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 120546928913433256659370639360.0000  s0.loss_mask: 7570234240339280644154589184.0000  s1.loss_cls: 372944951130879655430888357888.0000  s1.acc: 0.0000  s1.loss_bbox: 223092094979946043835582251008.0000  s1.loss_mask: 0.2867  s2.loss_cls: 56391623342202287264280608768.0000  s2.acc: 0.0000  s2.loss_bbox: 71679047712145243116071288832.0000  s2.loss_mask: 145470409119760982543958016.0000
+12/03 09:52:06 - mmengine - INFO - Epoch(train)   [7][700/787]  lr: 1.0000e-02  eta: 9:43:00  time: 0.4751  data_time: 0.0139  memory: 5905  loss: 855894471389842798421565505536.0000  loss_rpn_cls: 1260053662563810465693040640.0000  loss_rpn_bbox: 898724115416792849570594816.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 120715150185653987309325910016.0000  s0.loss_mask: 7540931082675274900836450304.0000  s1.loss_cls: 373494120040433669250723348480.0000  s1.acc: 0.0000  s1.loss_bbox: 223849004757869391031740399616.0000  s1.loss_mask: 0.2855  s2.loss_cls: 56338040208102105098867441664.0000  s2.acc: 0.0000  s2.loss_bbox: 71648831272415282709756116992.0000  s2.loss_mask: 149608275574792448469106688.0000
+12/03 09:52:29 - mmengine - INFO - Epoch(train)   [7][750/787]  lr: 1.0000e-02  eta: 9:42:30  time: 0.4681  data_time: 0.0128  memory: 5905  loss: 816686914106915222754080849920.0000  loss_rpn_cls: 1232247734144677886554013696.0000  loss_rpn_bbox: 771931762949118757617795072.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 115076761719796409609811394560.0000  s0.loss_mask: 7307895826325631287093624832.0000  s1.loss_cls: 356529305192817373404622487552.0000  s1.acc: 0.0000  s1.loss_bbox: 213434340028952366211601006592.0000  s1.loss_mask: 0.2850  s2.loss_cls: 53801702977107698971712684032.0000  s2.acc: 0.0000  s2.loss_bbox: 68391009379010785057284554752.0000  s2.loss_mask: 141728457938553362163171328.0000
+12/03 09:52:46 - mmengine - INFO - Exp name: x101-64x4d_fpn_20e_coco_20241203_090132
+12/03 09:52:46 - mmengine - INFO - Saving checkpoint at 7 epochs
+12/03 09:53:09 - mmengine - INFO - Epoch(val)   [7][ 50/703]    eta: 0:00:49  time: 0.0751  data_time: 0.0045  memory: 5903  
+12/03 09:53:13 - mmengine - INFO - Epoch(val)   [7][100/703]    eta: 0:00:45  time: 0.0744  data_time: 0.0048  memory: 1748  
+12/03 09:53:17 - mmengine - INFO - Epoch(val)   [7][150/703]    eta: 0:00:41  time: 0.0768  data_time: 0.0072  memory: 1748  
+12/03 09:53:21 - mmengine - INFO - Epoch(val)   [7][200/703]    eta: 0:00:38  time: 0.0769  data_time: 0.0068  memory: 1748  
+12/03 09:53:24 - mmengine - INFO - Epoch(val)   [7][250/703]    eta: 0:00:34  time: 0.0780  data_time: 0.0068  memory: 1748  
+12/03 09:53:28 - mmengine - INFO - Epoch(val)   [7][300/703]    eta: 0:00:30  time: 0.0771  data_time: 0.0065  memory: 1748  
+12/03 09:53:32 - mmengine - INFO - Epoch(val)   [7][350/703]    eta: 0:00:27  time: 0.0775  data_time: 0.0070  memory: 1748  
+12/03 09:53:36 - mmengine - INFO - Epoch(val)   [7][400/703]    eta: 0:00:23  time: 0.0773  data_time: 0.0064  memory: 1748  
+12/03 09:53:40 - mmengine - INFO - Epoch(val)   [7][450/703]    eta: 0:00:19  time: 0.0751  data_time: 0.0042  memory: 1748  
+12/03 09:53:44 - mmengine - INFO - Epoch(val)   [7][500/703]    eta: 0:00:15  time: 0.0753  data_time: 0.0045  memory: 1748  
+12/03 09:53:48 - mmengine - INFO - Epoch(val)   [7][550/703]    eta: 0:00:11  time: 0.0780  data_time: 0.0066  memory: 1748  
+12/03 09:53:51 - mmengine - INFO - Epoch(val)   [7][600/703]    eta: 0:00:07  time: 0.0751  data_time: 0.0047  memory: 1748  
+12/03 09:53:55 - mmengine - INFO - Epoch(val)   [7][650/703]    eta: 0:00:04  time: 0.0730  data_time: 0.0033  memory: 1748  
+12/03 09:53:59 - mmengine - INFO - Epoch(val)   [7][700/703]    eta: 0:00:00  time: 0.0736  data_time: 0.0035  memory: 1748  
+12/03 09:53:59 - mmengine - INFO - Evaluating bbox...
+Loading and preparing results...
+12/03 09:53:59 - mmengine - ERROR - /home/lcy/playground/label_anything/mmdetection-3.3.0/mmdet/evaluation/metrics/coco_metric.py - compute_metrics - 465 - The testing results of the whole dataset is empty.
+12/03 09:53:59 - mmengine - INFO - Epoch(val) [7][703/703]    data_time: 0.0055  time: 0.0759
+12/03 09:54:23 - mmengine - INFO - Epoch(train)   [8][ 50/787]  lr: 1.0000e-02  eta: 9:41:40  time: 0.4747  data_time: 0.0162  memory: 5905  loss: 836698705968077568304931143680.0000  loss_rpn_cls: 1229399426994618731922980864.0000  loss_rpn_bbox: 890988237171158523154792448.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 118057006783678355673198886912.0000  s0.loss_mask: 7348657605559744790523805696.0000  s1.loss_cls: 365089705899194010739394215936.0000  s1.acc: 0.0000  s1.loss_bbox: 218698747292512133746859704320.0000  s1.loss_mask: 0.2851  s2.loss_cls: 55134431300910540616925970432.0000  s2.acc: 0.0000  s2.loss_bbox: 70105811624553100671040094208.0000  s2.loss_mask: 143965597709671505955127296.0000
+12/03 09:54:46 - mmengine - INFO - Epoch(train)   [8][100/787]  lr: 1.0000e-02  eta: 9:41:13  time: 0.4713  data_time: 0.0133  memory: 5905  loss: 825101594672888639874104557568.0000  loss_rpn_cls: 1217883269291875462702694400.0000  loss_rpn_bbox: 897043309339986765440614400.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 116466774710219692690196398080.0000  s0.loss_mask: 7274878007962536067880452096.0000  s1.loss_cls: 360052129764957781522263310336.0000  s1.acc: 0.0000  s1.loss_bbox: 215355958786848578076957212672.0000  s1.loss_mask: 0.2858  s2.loss_cls: 54462041682718965164064899072.0000  s2.acc: 0.0000  s2.loss_bbox: 69236729964404883662552694784.0000  s2.loss_mask: 138144668403163981022232576.0000
+12/03 09:55:10 - mmengine - INFO - Epoch(train)   [8][150/787]  lr: 1.0000e-02  eta: 9:40:45  time: 0.4718  data_time: 0.0133  memory: 5905  loss: 824418911240237692854076440576.0000  loss_rpn_cls: 1185244932920645705334259712.0000  loss_rpn_bbox: 756099282591098228749369344.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 116485594757363876605703749632.0000  s0.loss_mask: 7267586898425392656252141568.0000  s1.loss_cls: 359752658061026741396747321344.0000  s1.acc: 0.0000  s1.loss_bbox: 215376814268394206355882246144.0000  s1.loss_mask: 0.2838  s2.loss_cls: 54346969086881983876070113280.0000  s2.acc: 0.0000  s2.loss_bbox: 69110145136332304257946484736.0000  s2.loss_mask: 137797397746864834587131904.0000
+12/03 09:55:34 - mmengine - INFO - Epoch(train)   [8][200/787]  lr: 1.0000e-02  eta: 9:40:18  time: 0.4709  data_time: 0.0141  memory: 5903  loss: 789717933981586275165892771840.0000  loss_rpn_cls: 1177962038825443499752554496.0000  loss_rpn_bbox: 776590336901632782923464704.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 111228922163419049086949523456.0000  s0.loss_mask: 7026816246396940030681546752.0000  s1.loss_cls: 344702407322465180259664789504.0000  s1.acc: 0.0000  s1.loss_bbox: 206586849504762999642660012032.0000  s1.loss_mask: 0.2871  s2.loss_cls: 51979035694796545639135051776.0000  s2.acc: 0.0000  s2.loss_bbox: 66095872021837420364149293056.0000  s2.loss_mask: 143481761564243542509879296.0000
+12/03 09:55:57 - mmengine - INFO - Epoch(train)   [8][250/787]  lr: 1.0000e-02  eta: 9:39:50  time: 0.4719  data_time: 0.0134  memory: 5904  loss: 790734156269975683932008480768.0000  loss_rpn_cls: 1176117687605028776455438336.0000  loss_rpn_bbox: 853829396299587977740288000.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 111512891943791449231406923776.0000  s0.loss_mask: 7012063691563616890970439680.0000  s1.loss_cls: 345097571549647850134501851136.0000  s1.acc: 0.0000  s1.loss_bbox: 206606239541541662405907447808.0000  s1.loss_mask: 0.2860  s2.loss_cls: 52100211099286670434407284736.0000  s2.acc: 0.0000  s2.loss_bbox: 66239351635462785021511729152.0000  s2.loss_mask: 135883617870143773166534656.0000
+12/03 09:56:21 - mmengine - INFO - Epoch(train)   [8][300/787]  lr: 1.0000e-02  eta: 9:39:25  time: 0.4741  data_time: 0.0136  memory: 5905  loss: 780260543562515653348038803456.0000  loss_rpn_cls: 1175371506477070499834757120.0000  loss_rpn_bbox: 808089891935457938142920704.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 110001495339739812336779657216.0000  s0.loss_mask: 6953815077787809964533743616.0000  s1.loss_cls: 340524586741257509760172818432.0000  s1.acc: 0.0000  s1.loss_bbox: 203870052233228850624961970176.0000  s1.loss_mask: 0.2864  s2.loss_cls: 51417115734607438176350896128.0000  s2.acc: 0.0000  s2.loss_bbox: 65373752767819348149534720000.0000  s2.loss_mask: 136265474419140442818871296.0000
+12/03 09:56:44 - mmengine - INFO - Epoch(train)   [8][350/787]  lr: 1.0000e-02  eta: 9:38:58  time: 0.4716  data_time: 0.0135  memory: 5904  loss: 816783047132512239475918635008.0000  loss_rpn_cls: 1140213367001464823703666688.0000  loss_rpn_bbox: 778268434996408764027895808.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 115290758212598216563823214592.0000  s0.loss_mask: 7251927047125632242663030784.0000  s1.loss_cls: 356495945640403691491444129792.0000  s1.acc: 0.0000  s1.loss_bbox: 213567150352759316187929640960.0000  s1.loss_mask: 0.2841  s2.loss_cls: 53763505124114051017744580608.0000  s2.acc: 0.0000  s2.loss_bbox: 68360593277625923292870213632.0000  s2.loss_mask: 134682571669493954205712384.0000
+12/03 09:57:08 - mmengine - INFO - Epoch(train)   [8][400/787]  lr: 1.0000e-02  eta: 9:38:30  time: 0.4705  data_time: 0.0134  memory: 5905  loss: 799123480372461332723235028992.0000  loss_rpn_cls: 1153593143179873138778308608.0000  loss_rpn_bbox: 743081335608346994251137024.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 112750033619799241897273196544.0000  s0.loss_mask: 7098582221022894505253142528.0000  s1.loss_cls: 348833641947213961617412718592.0000  s1.acc: 0.0000  s1.loss_bbox: 208690541180247527067247181824.0000  s1.loss_mask: 0.2861  s2.loss_cls: 52713007191436991380909457408.0000  s2.acc: 0.0000  s2.loss_bbox: 67009456885930873131622203392.0000  s2.loss_mask: 131543575376765622656434176.0000
+12/03 09:57:32 - mmengine - INFO - Epoch(train)   [8][450/787]  lr: 1.0000e-02  eta: 9:38:02  time: 0.4711  data_time: 0.0129  memory: 5904  loss: 798941201559694427379342508032.0000  loss_rpn_cls: 1154930448008064061174448128.0000  loss_rpn_bbox: 858137161141354529067892736.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 112482896525860357918332813312.0000  s0.loss_mask: 7140933165122865418005905408.0000  s1.loss_cls: 348832190858441170172076097536.0000  s1.acc: 0.0000  s1.loss_bbox: 208753587984003043774833885184.0000  s1.loss_mask: 0.2871  s2.loss_cls: 52652627249705338963033587712.0000  s2.acc: 0.0000  s2.loss_bbox: 66925394417958629558588538880.0000  s2.loss_mask: 140497182781688797003251712.0000
+12/03 09:57:51 - mmengine - INFO - Exp name: x101-64x4d_fpn_20e_coco_20241203_090132
+12/03 09:57:55 - mmengine - INFO - Epoch(train)   [8][500/787]  lr: 1.0000e-02  eta: 9:37:35  time: 0.4715  data_time: 0.0142  memory: 5905  loss: 792298621884088464067497295872.0000  loss_rpn_cls: 1174325953877409874795560960.0000  loss_rpn_bbox: 734558660931522698955194368.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 111644167215149483934049370112.0000  s0.loss_mask: 7054407091683131815289159680.0000  s1.loss_cls: 346002015801177044583731691520.0000  s1.acc: 0.0000  s1.loss_bbox: 206836203111000689593217449984.0000  s1.loss_mask: 0.2869  s2.loss_cls: 52279999052628561113575849984.0000  s2.acc: 0.0000  s2.loss_bbox: 66439362887149237294388477952.0000  s2.loss_mask: 133583691930792893653975040.0000
+12/03 09:58:19 - mmengine - INFO - Epoch(train)   [8][550/787]  lr: 1.0000e-02  eta: 9:37:08  time: 0.4702  data_time: 0.0131  memory: 5904  loss: 773272709028821848608619888640.0000  loss_rpn_cls: 1133549610569915648043909120.0000  loss_rpn_bbox: 779576436064834047837208576.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 109098511055032444978565480448.0000  s0.loss_mask: 6832920052001691810178007040.0000  s1.loss_cls: 337546967690929366997032501248.0000  s1.acc: 0.0000  s1.loss_bbox: 202077463828112016631746527232.0000  s1.loss_mask: 0.2857  s2.loss_cls: 50926183709651439257326190592.0000  s2.acc: 0.0000  s2.loss_bbox: 64746814321420798355956563968.0000  s2.loss_mask: 130728688889336257635680256.0000
+12/03 09:58:42 - mmengine - INFO - Epoch(train)   [8][600/787]  lr: 1.0000e-02  eta: 9:36:42  time: 0.4729  data_time: 0.0132  memory: 5905  loss: 771179352724621736726421831680.0000  loss_rpn_cls: 1145566972212099714866216960.0000  loss_rpn_bbox: 786357678333649186719793152.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 108565713551153866840305827840.0000  s0.loss_mask: 6964426595355262024295645184.0000  s1.loss_cls: 336838633496911472988914712576.0000  s1.acc: 0.0000  s1.loss_bbox: 201233810600316803125352595456.0000  s1.loss_mask: 0.2858  s2.loss_cls: 50882430889740324448090718208.0000  s2.acc: 0.0000  s2.loss_bbox: 64635311881868530292908621824.0000  s2.loss_mask: 127105733780331882780557312.0000
+12/03 09:59:06 - mmengine - INFO - Epoch(train)   [8][650/787]  lr: 1.0000e-02  eta: 9:36:13  time: 0.4682  data_time: 0.0139  memory: 5905  loss: 762335148370725530009564348416.0000  loss_rpn_cls: 1118879232292092426984620032.0000  loss_rpn_bbox: 741468501356233913645662208.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 107424192807321805324065701888.0000  s0.loss_mask: 6763602677523726991460663296.0000  s1.loss_cls: 332822589479938019314475466752.0000  s1.acc: 0.0000  s1.loss_bbox: 199168676291586250798918533120.0000  s1.loss_mask: 0.2869  s2.loss_cls: 50270517880122308921336528896.0000  s2.acc: 0.0000  s2.loss_bbox: 63895280219544295782345605120.0000  s2.loss_mask: 129945698298149863700824064.0000
+12/03 09:59:29 - mmengine - INFO - Epoch(train)   [8][700/787]  lr: 1.0000e-02  eta: 9:35:46  time: 0.4711  data_time: 0.0140  memory: 5905  loss: 739137308825411175553743978496.0000  loss_rpn_cls: 1079355474558086567637811200.0000  loss_rpn_bbox: 699588563875655685714739200.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 104321969583871319194977959936.0000  s0.loss_mask: 6552477932518607139901538304.0000  s1.loss_cls: 322602850061229059932482961408.0000  s1.acc: 0.0000  s1.loss_bbox: 193063080686640637435034206208.0000  s1.loss_mask: 0.2847  s2.loss_cls: 48740458625401362508320604160.0000  s2.acc: 0.0000  s2.loss_bbox: 61956093691647799578345865216.0000  s2.loss_mask: 121426035605698014410178560.0000
+12/03 09:59:53 - mmengine - INFO - Epoch(train)   [8][750/787]  lr: 1.0000e-02  eta: 9:35:21  time: 0.4750  data_time: 0.0138  memory: 5905  loss: 745685862028660721822094852096.0000  loss_rpn_cls: 1067417441294116916444528640.0000  loss_rpn_bbox: 815662747449275660904693760.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 105360481253165217593841156096.0000  s0.loss_mask: 6485304612774152857110708224.0000  s1.loss_cls: 325309506145188556341229125632.0000  s1.acc: 0.0000  s1.loss_bbox: 195004383590300070814641291264.0000  s1.loss_mask: 0.2858  s2.loss_cls: 49081140957694820263399522304.0000  s2.acc: 0.0000  s2.loss_bbox: 62435174276783726706206703616.0000  s2.loss_mask: 126793668366162537796861952.0000
+12/03 10:00:10 - mmengine - INFO - Exp name: x101-64x4d_fpn_20e_coco_20241203_090132
+12/03 10:00:10 - mmengine - INFO - Saving checkpoint at 8 epochs
+12/03 10:00:32 - mmengine - INFO - Epoch(val)   [8][ 50/703]    eta: 0:00:49  time: 0.0763  data_time: 0.0044  memory: 5904  
+12/03 10:00:35 - mmengine - INFO - Epoch(val)   [8][100/703]    eta: 0:00:46  time: 0.0768  data_time: 0.0052  memory: 1748  
+12/03 10:00:39 - mmengine - INFO - Epoch(val)   [8][150/703]    eta: 0:00:42  time: 0.0754  data_time: 0.0047  memory: 1748  
+12/03 10:00:43 - mmengine - INFO - Epoch(val)   [8][200/703]    eta: 0:00:38  time: 0.0765  data_time: 0.0059  memory: 1748  
+12/03 10:00:47 - mmengine - INFO - Epoch(val)   [8][250/703]    eta: 0:00:34  time: 0.0781  data_time: 0.0061  memory: 1748  
+12/03 10:00:51 - mmengine - INFO - Epoch(val)   [8][300/703]    eta: 0:00:30  time: 0.0764  data_time: 0.0055  memory: 1748  
+12/03 10:00:55 - mmengine - INFO - Epoch(val)   [8][350/703]    eta: 0:00:27  time: 0.0766  data_time: 0.0050  memory: 1748  
+12/03 10:00:58 - mmengine - INFO - Epoch(val)   [8][400/703]    eta: 0:00:23  time: 0.0739  data_time: 0.0036  memory: 1748  
+12/03 10:01:02 - mmengine - INFO - Epoch(val)   [8][450/703]    eta: 0:00:19  time: 0.0745  data_time: 0.0040  memory: 1748  
+12/03 10:01:06 - mmengine - INFO - Epoch(val)   [8][500/703]    eta: 0:00:15  time: 0.0744  data_time: 0.0039  memory: 1748  
+12/03 10:01:10 - mmengine - INFO - Epoch(val)   [8][550/703]    eta: 0:00:11  time: 0.0771  data_time: 0.0059  memory: 1748  
+12/03 10:01:14 - mmengine - INFO - Epoch(val)   [8][600/703]    eta: 0:00:07  time: 0.0776  data_time: 0.0065  memory: 1748  
+12/03 10:01:18 - mmengine - INFO - Epoch(val)   [8][650/703]    eta: 0:00:04  time: 0.0780  data_time: 0.0069  memory: 1748  
+12/03 10:01:21 - mmengine - INFO - Epoch(val)   [8][700/703]    eta: 0:00:00  time: 0.0773  data_time: 0.0062  memory: 1748  
+12/03 10:01:22 - mmengine - INFO - Evaluating bbox...
+Loading and preparing results...
+12/03 10:01:22 - mmengine - ERROR - /home/lcy/playground/label_anything/mmdetection-3.3.0/mmdet/evaluation/metrics/coco_metric.py - compute_metrics - 465 - The testing results of the whole dataset is empty.
+12/03 10:01:22 - mmengine - INFO - Epoch(val) [8][703/703]    data_time: 0.0053  time: 0.0763
+12/03 10:01:46 - mmengine - INFO - Epoch(train)   [9][ 50/787]  lr: 1.0000e-02  eta: 9:34:36  time: 0.4798  data_time: 0.0154  memory: 5904  loss: 736731623513399030151691370496.0000  loss_rpn_cls: 1087299660816498686867537920.0000  loss_rpn_bbox: 771025915658895683464724480.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 104002534453423240237457342464.0000  s0.loss_mask: 6480415328344988344582668288.0000  s1.loss_cls: 321495036152641773564447424512.0000  s1.acc: 0.0000  s1.loss_bbox: 192481940978208215563036000256.0000  s1.loss_mask: 0.2847  s2.loss_cls: 48560046989118077827733782528.0000  s2.acc: 0.0000  s2.loss_bbox: 61732607792293321164938280960.0000  s2.loss_mask: 120721168912571899232387072.0000
+12/03 10:02:09 - mmengine - INFO - Epoch(train)   [9][100/787]  lr: 1.0000e-02  eta: 9:34:11  time: 0.4733  data_time: 0.0157  memory: 5904  loss: 719611161355453901725958668288.0000  loss_rpn_cls: 1052584746425840392762032128.0000  loss_rpn_bbox: 678984378635196194122366976.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 101629153244915837790691786752.0000  s0.loss_mask: 6360397552968561085596565504.0000  s1.loss_cls: 314040360935499028474187743232.0000  s1.acc: 0.0000  s1.loss_bbox: 188067629761483571655904067584.0000  s1.loss_mask: 0.2844  s2.loss_cls: 47392974370273165374310580224.0000  s2.acc: 0.0000  s2.loss_bbox: 60269990400589839742799970304.0000  s2.loss_mask: 119088090834577484024905728.0000
+12/03 10:02:33 - mmengine - INFO - Epoch(train)   [9][150/787]  lr: 1.0000e-02  eta: 9:33:45  time: 0.4724  data_time: 0.0143  memory: 5905  loss: 711708023394056233833996484608.0000  loss_rpn_cls: 1057037952776581809629560832.0000  loss_rpn_bbox: 775226341110506558278598656.0000  s0.loss_cls: 0.0000  s0.acc: 100.0000  s0.loss_bbox: 100461943771890240867794944000.0000  s0.loss_mask: 6291014177516040851648675840.0000  s1.loss_cls: 310553678711893227770640072704.0000  s1.acc: 0.0000  s1.loss_bbox: 185893853633921430919361593344.0000  s1.loss_mask: 0.2855  s2.loss_cls: 46915700987566565168070524928.0000  s2.acc: 0.0000  s2.loss_bbox: 59642317248413875941882724352.0000  s2.loss_mask: 117243355645184807364722688.0000
